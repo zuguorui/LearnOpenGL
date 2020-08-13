@@ -1,0 +1,23 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "C/C++: clang++ build active file",
+            "type": "shell",
+            "command": "clang++",
+            "args": [
+                "-g",
+                "${workspaceFolder}/*.cpp",
+                "-o",
+                "${workspaceFolder}/main.out",
+                "-I",
+                "/usr/local/include",
+                "-L",
+                "/usr/local/lib/",
+                "-lglfw"
+            ]       
+        }
+    ]
+}
