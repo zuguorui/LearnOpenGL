@@ -1,7 +1,8 @@
 
 #include<iostream>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+
+#include "DrawPractice.h"
+#include "TexturePractice.h"
 
 using namespace std;
 
@@ -9,31 +10,9 @@ using namespace std;
 
 int main()
 {
-    GLFWwindow *window;
-
-    if(!glfwInit())
-    {
-        cout << "Error glfwInit" << endl;
-        return -1;
-    }
-
-    window = glfwCreateWindow(640, 480, "Hello world", NULL, NULL);
-
-    if(!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
-
-
-    glfwMakeContextCurrent(window);
-
-    while(!glfwWindowShouldClose(window))
-    {
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-
-    glfwTerminate();
+    //drawTriangle();
+    //drawRectangle();
+    //moreProperties();
+    drawTexture();
     return 0;
 }
