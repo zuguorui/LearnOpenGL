@@ -9,17 +9,14 @@
 #ifndef TexturePractice_h
 #define TexturePractice_h
 
-#define STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_STATIC
+
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
 #include <stdio.h>
 
-extern "C"{
-#include "stb/stb_image.h"
-}
+#include "stb_include.h"
 
 
 #include <glad/glad.h>

@@ -8,6 +8,10 @@
 
 #include "WindowUtil.h"
 
+void frameBufferSizeCallback(GLFWwindow *window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
 
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode)
 {
@@ -45,6 +49,7 @@ bool initWindow(GLFWwindow **window)
     glfwMakeContextCurrent(*window);
 
     glfwSetKeyCallback(*window, key_callback);
+    glfwSetFramebufferSizeCallback(*window, frameBufferSizeCallback);
     
     return true;
 }
