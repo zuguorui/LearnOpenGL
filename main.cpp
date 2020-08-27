@@ -6,6 +6,7 @@
 #include "TexturePractice.h"
 #include "Transform.h"
 #include "CoordSystemTest.h"
+#include "CameraTest.h"
 
 using namespace std;
 
@@ -21,7 +22,10 @@ int main()
     // Transform transform;
     // transform.draw();
 
-    CoordSystemTest coordSystemTest;
-    coordSystemTest.draw();
+    // CoordSystemTest coordSystemTest;
+    // coordSystemTest.draw2();
+
+    CameraTest camTest;
+    camTest.freeVision();
     return 0;
 }

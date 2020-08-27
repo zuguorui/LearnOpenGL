@@ -12,6 +12,8 @@ class CoordSystemTest
 {
 public:
     void draw();
+    void draw1();
+    void draw2();
 
 private:
     GLFWwindow *window = NULL;
