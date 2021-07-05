@@ -23,12 +23,13 @@
                 "-framework",
                 "CoreVideo",
                 "-I",
-                "/usr/local/include",
+                "/opt/homebrew/include/",
                 "-I",
                 "${workspaceFolder}/stb/",
                 "-L",
-                "/usr/local/lib/",
-                "-lglfw"
+                "/opt/homebrew/lib/",
+                "-lglfw",
+                "-std=c++11"
             ]       
         }
     ]

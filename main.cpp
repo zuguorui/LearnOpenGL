@@ -15,9 +15,9 @@ using namespace std;
 int main()
 {
     //drawTriangle();
-    //drawRectangle();
+    // drawRectangle();
     //moreProperties();
-    //drawTexture();
+    drawTexture();
 
     // Transform transform;
     // transform.draw();
@@ -25,7 +25,7 @@ int main()
     // CoordSystemTest coordSystemTest;
     // coordSystemTest.draw2();
 
-    CameraTest camTest;
-    camTest.freeVision();
+    // CameraTest camTest;
+    // camTest.freeVision();
     return 0;
 }

@@ -4,13 +4,15 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/glm/**"
+                "${workspaceFolder}/glm/**",
+                "${workspaceFolder}/stb/**",
+                "/opt/homebrew/include/**"
             ],
             "defines": [],
             "macFrameworkPath": [
                 "/System/Library/Frameworks",
                 "/Library/Frameworks",
-                "/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/OpenGL.framework"
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework"
             ],
             "intelliSenseMode": "clang-x64"
         }
