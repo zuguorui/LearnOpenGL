@@ -5,13 +5,13 @@
     "tasks": [
         {
             "label": "C/C++: clang++ build active file",
-            "type": "shell",
+            "type": "cppbuild",
             "command": "clang++",
             "args": [
                 "-g",
                 "${workspaceFolder}/*.cpp",
-                "${workspaceFolder}/*.c",
                 "${workspaceFolder}/stb/*.c",
+                "${workspaceFolder}/glad/*.c",
                 "-o",
                 "${workspaceFolder}/main.out",
                 "-framework",
@@ -29,8 +29,20 @@
                 "-L",
                 "/opt/homebrew/lib/",
                 "-lglfw",
-                "-std=c++11"
-            ]       
+                "-std=c++17",
+                "-D__APPLE__"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "调试器生成的任务。"   
         }
     ]
 }

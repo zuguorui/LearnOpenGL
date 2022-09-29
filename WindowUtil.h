@@ -11,10 +11,10 @@
 
 #include <iostream>
 #include <stdio.h>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
-using namespace std;
+#include "default_gl_include.h"
+
+
 
 //static GLFWwindow *window = NULL;
 

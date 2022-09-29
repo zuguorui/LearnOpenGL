@@ -6,12 +6,13 @@
     "configurations": [
         {
             "name": "clang++ - 生成和调试活动文件",
-            "type": "lldb",
+            "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/main.out",
             "args": [],
             "cwd": "${workspaceFolder}",
-            "terminal": "console",
+            "externalConsole": false,
+            "MIMode": "lldb",
             "preLaunchTask": "C/C++: clang++ build active file"
         }
     ]

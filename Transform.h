@@ -7,7 +7,7 @@
 #include "stb_include.h"
 
 
-#include <glad/glad.h>
+#include "glad/glad.h"
 #include "WindowUtil.h"
 #include "Shader.h"
 

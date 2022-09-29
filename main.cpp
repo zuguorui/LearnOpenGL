@@ -2,6 +2,7 @@
 
 #include<iostream>
 
+#include "chapter_create_window.h"
 #include "DrawPractice.h"
 #include "TexturePractice.h"
 #include "Transform.h"
@@ -14,18 +15,6 @@ using namespace std;
 
 int main()
 {
-    //drawTriangle();
-    // drawRectangle();
-    //moreProperties();
-    drawTexture();
-
-    // Transform transform;
-    // transform.draw();
-
-    // CoordSystemTest coordSystemTest;
-    // coordSystemTest.draw2();
-
-    // CameraTest camTest;
-    // camTest.freeVision();
+    createWindow();
     return 0;
 }

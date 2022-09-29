@@ -6,9 +6,12 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/glm/**",
                 "${workspaceFolder}/stb/**",
+                "${workspaceFolder}/glad/**",
                 "/opt/homebrew/include/**"
             ],
-            "defines": [],
+            "defines": [
+                "-D__APPLE__"
+            ],
             "macFrameworkPath": [
                 "/System/Library/Frameworks",
                 "/Library/Frameworks",
