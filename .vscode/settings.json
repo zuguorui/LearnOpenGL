@@ -1,6 +1,27 @@
 {
     "files.autoSave": "onFocusChange",
     "files.associations": {
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "iosfwd": "cpp",
+        "fstream": "cpp",
+        "ios": "cpp",
+        "istream": "cpp",
+        "__debug": "cpp",
+        "__hash_table": "cpp",
+        "__string": "cpp",
+        "array": "cpp",
+        "atomic": "cpp",
+        "bitset": "cpp",
+        "cstddef": "cpp",
+        "filesystem": "cpp",
+        "iterator": "cpp",
+        "locale": "cpp",
+        "memory": "cpp",
+        "sstream": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "algorithm": "cpp"
     }
 }

@@ -7,18 +7,19 @@
 
 class GLWindow {
 public:
+    GLWindow(GLWindow&& src);
     ~GLWindow();
 
-    GLWindow *window;
+    GLFWwindow *window;
 
-    static class Builder {
+    class Builder {
     public:
         ~Builder();
         Builder& setTitle(const char * title);
         Builder& setSize(int width, int height);
         Builder& setKeyCallback(GLFWkeyfun callback);
         Builder& setFrameSizeCallback(GLFWframebuffersizefun callback);
-        GLWindow *build();
+        GLWindow build();
     private:
     
         char *title = nullptr;

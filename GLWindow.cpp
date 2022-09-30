@@ -4,7 +4,7 @@
 #include <string.h>
 
 static void defaultFrameBufferSizeCallback(GLFWwindow *window, int width, int height) {
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, 480, 240);
 }
 
 static void defaultKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode) {
@@ -14,9 +14,16 @@ static void defaultKeyCallback(GLFWwindow *window, int key, int scancode, int ac
     }
 }
 
+GLWindow::Builder::~Builder() {
+    if (this->title) {
+        free(this->title);
+        this->title = nullptr;
+    }
+}
+
 GLWindow::Builder& GLWindow::Builder::setTitle(const char *title) {
     if (this->title) {
-        free[] this->title;
+        free(this->title);
     }
     this->title = (char *)malloc(strlen(title));
     strcpy(this->title, title);
@@ -39,8 +46,8 @@ GLWindow::Builder& GLWindow::Builder::setFrameSizeCallback(GLFWframebuffersizefu
     return *this;
 }
 
-GLWindow::Builder& GLWindow::Builder::build() {
-    return new GLWindow(
+GLWindow GLWindow::Builder::build() {
+    return GLWindow(
         this->title == nullptr ? " " : this->title,
         this->width, this->height,
         this->keyCallback == nullptr ? defaultKeyCallback : this->keyCallback,
@@ -48,6 +55,42 @@ GLWindow::Builder& GLWindow::Builder::build() {
     );
 }
 
-GLWindow::GLWindow(const char *title, int width, int height, GLFWkeyfun keyCallback, GLFWframebuffersizefun frameSizeCallback) {
+GLWindow::GLWindow(GLWindow&& src) {
+    printf("GLWindow: move constructor\n");
+    this->window = src.window;
+    src.window = nullptr;
     
+}
+
+GLWindow::GLWindow(const char *title, int width, int height, GLFWkeyfun keyCallback, GLFWframebuffersizefun frameSizeCallback) {
+    printf("GLWindow: constructor\n");
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+
+    window = glfwCreateWindow(width, height, title, nullptr, nullptr);
+    if (!window) {
+        printf("create window failed\n");
+        glfwTerminate();
+        return;
+    }
+    glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, frameSizeCallback);
+    glfwSetKeyCallback(window, defaultKeyCallback);
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        printf("glad load failed\n");
+        glfwTerminate();
+        return;
+    }
+}
+
+GLWindow::~GLWindow() {
+    printf("GLWindow: destructor\n");
+    glfwTerminate();
 }

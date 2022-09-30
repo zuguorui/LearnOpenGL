@@ -60,12 +60,10 @@ void CameraTest::draw()
         glm::vec3(-1.3f,  1.0f, -1.5f)
     };
     
+    GLWindow glWindow = GLWindow::Builder().setTitle("camera").build();
 
-    if (!initWindow(&window))
-    {
-        cout << "Error when init window" << endl;
-        return;
-    }
+    GLFWwindow *window = glWindow.window;
+
 
     if (!gladLoadGL())
     {
@@ -218,8 +216,6 @@ void CameraTest::draw()
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     
-
-    glfwTerminate();
 }
 
 
@@ -291,11 +287,9 @@ void CameraTest::freeVision()
     
     
 
-    if (!initWindow(&window))
-    {
-        cout << "Error when init window" << endl;
-        return;
-    }
+    GLWindow glWindow = GLWindow::Builder().setTitle("camera").build();
+
+    GLFWwindow *window = glWindow.window;
 
     glfwSetWindowUserPointer(window, this);
     glfwSetKeyCallback(window, key_callback);

@@ -18,11 +18,10 @@ void CoordSystemTest::draw()
         1, 2, 3  // second triangle
     };
 
-    if (!initWindow(&window))
-    {
-        cout << "Error when init window" << endl;
-        return;
-    }
+    GLWindow glWindow = GLWindow::Builder().setTitle("coord system").build();
+
+    GLFWwindow *window = glWindow.window;
+
 
     if (!gladLoadGL())
     {
@@ -211,11 +210,9 @@ void CoordSystemTest::draw1()
     };
     
 
-    if (!initWindow(&window))
-    {
-        cout << "Error when init window" << endl;
-        return;
-    }
+    GLWindow glWindow = GLWindow::Builder().setTitle("draw1").build();
+
+    GLFWwindow *window = glWindow.window;
 
     if (!gladLoadGL())
     {
@@ -419,11 +416,9 @@ void CoordSystemTest::draw2()
     };
     
 
-    if (!initWindow(&window))
-    {
-        cout << "Error when init window" << endl;
-        return;
-    }
+    GLWindow glWindow = GLWindow::Builder().setTitle("draw2").build();
+
+    GLFWwindow *window = glWindow.window;
 
     if (!gladLoadGL())
     {

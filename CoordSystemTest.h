@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include "stb_include.h"
-#include "WindowUtil.h"
+#include "GLWindow.h"
 #include "Shader.h"
 
 using namespace std;

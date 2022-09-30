@@ -1,13 +1,8 @@
 
-
 #include<iostream>
 
 #include "chapter_create_window.h"
-#include "DrawPractice.h"
-#include "TexturePractice.h"
-#include "Transform.h"
-#include "CoordSystemTest.h"
-#include "CameraTest.h"
+#include "chapter_hello_triangle.h"
 
 using namespace std;
 
@@ -15,6 +10,7 @@ using namespace std;
 
 int main()
 {
-    createWindow();
+    // createWindow();
+    drawTriangle();
     return 0;
 }
