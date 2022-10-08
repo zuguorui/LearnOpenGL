@@ -3,6 +3,7 @@
 
 #include "chapter_create_window.h"
 #include "chapter_hello_triangle.h"
+#include "chapter_shaders.h"
 
 using namespace std;
 
@@ -11,6 +12,7 @@ using namespace std;
 int main()
 {
     // createWindow();
-    drawTriangle();
+    // drawTriangle();
+    testShaders();
     return 0;
 }

@@ -12,6 +12,8 @@ public:
 
     GLFWwindow *window;
 
+    bool success();
+
     class Builder {
     public:
         ~Builder();

@@ -2,9 +2,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <iostream>
+
+using namespace std;
+
 
 static void defaultFrameBufferSizeCallback(GLFWwindow *window, int width, int height) {
-    glViewport(0, 0, 480, 240);
+    glViewport(0, 0, width, height);
 }
 
 static void defaultKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode) {
@@ -48,7 +52,7 @@ GLWindow::Builder& GLWindow::Builder::setFrameSizeCallback(GLFWframebuffersizefu
 
 GLWindow GLWindow::Builder::build() {
     return GLWindow(
-        this->title == nullptr ? " " : this->title,
+        this->title == nullptr ? "No title" : this->title,
         this->width, this->height,
         this->keyCallback == nullptr ? defaultKeyCallback : this->keyCallback,
         this->frameSizeCallback == nullptr ? defaultFrameBufferSizeCallback : this->frameSizeCallback
@@ -86,8 +90,14 @@ GLWindow::GLWindow(const char *title, int width, int height, GLFWkeyfun keyCallb
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         printf("glad load failed\n");
         glfwTerminate();
+        glfwDestroyWindow(window);
+        window = nullptr;
         return;
     }
+}
+
+bool GLWindow::success() {
+    return window != nullptr;
 }
 
 GLWindow::~GLWindow() {
