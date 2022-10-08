@@ -5,4 +5,6 @@ void testShaders();
 
 void testUniform();
 
+void testMoreAttribute();
+
 #endif

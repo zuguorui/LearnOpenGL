@@ -13,6 +13,8 @@ int main()
 {
     // createWindow();
     // drawTriangle();
-    testShaders();
+    // testShaders();
+    // testUniform();
+    testMoreAttribute();
     return 0;
 }
