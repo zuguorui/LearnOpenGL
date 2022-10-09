@@ -148,3 +148,119 @@ void drawTriangle() {
     glDeleteBuffers(1, &VBO);
     glDeleteProgram(shaderProgram);
 }
+
+void drawRectangle() {
+    GLWindow glWindow = GLWindow::Builder().setTitle("rectangle").build();
+
+    // begin: 设置顶点着色器
+    string vertexShaderCode = readShaderProgram("./shaders/hello_triangle.vs");
+    if (vertexShaderCode.size() == 0) {
+        printf("read vertex shader code failed\n");
+        return;
+    }
+    const char *vertexShaderCodeCStr = vertexShaderCode.c_str();
+    GLuint vertexShader;
+    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &vertexShaderCodeCStr, nullptr);
+    glCompileShader(vertexShader);
+    
+
+    if (!checkShaderCompileStatus(vertexShader)) {
+        return;
+    }
+    // end: 设置顶点着色器
+
+    // begin: 设置片段着色器
+    
+    string fragmentShaderCode = readShaderProgram("./shaders/hello_triangle.frag");
+    if (fragmentShaderCode.size() == 0) {
+        printf("read fragment shader program failed\n");
+        return;
+    }
+    const char* fragmentShaderCodeCStr = fragmentShaderCode.c_str();
+    GLuint fragmentShader;
+    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentShaderCodeCStr, nullptr);
+    glCompileShader(fragmentShader);
+
+    if (!checkShaderCompileStatus(fragmentShader)) {
+        return;
+    }
+    // end: 设置片段着色器
+
+    // begin: 设置着色器程序
+    GLuint shaderProgram = glCreateProgram();
+    // 将shader链接到program里
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    if (!checkProgramLinkStatus(shaderProgram)) {
+        return;
+    }
+
+    // 链接之后，shader就可以删除了
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    // end: 设置着色器程序
+    
+
+    float vertices[] = {
+        -0.5f,  0.5f, 0.0f, // 左上
+        -0.5f, -0.5f, 0.0f, // 左下
+         0.5f, -0.5f, 0.0f, // 右下
+         0.5f,  0.5f, 0.0f  // 右上
+    };
+
+    unsigned int indices[] = {
+        0, 1, 2,
+        2, 3, 0
+    };
+
+    GLuint VAO, VBO, EBO;
+
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+    glEnableVertexAttribArray(0);
+
+    // 这里解绑VBO是可以的，因为glVertexAttribPointer已经将VBO注册为顶点属性绑定的buffer。
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    // 当目标是GL_ELEMENT_ARRAY_BUFFER的时候，VAO会存储glBindBuffer的调用，这也意味着它也会储存解绑调用，所以确保你没有在解绑VAO之前解绑索引数组缓冲，否则
+    // 它就没有这个EBO配置了。
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    
+
+    while (!glfwWindowShouldClose(glWindow.window)) {
+
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glUseProgram(shaderProgram);
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+        
+        
+        glfwSwapBuffers(glWindow.window);
+        glfwPollEvents();
+    }
+
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteProgram(shaderProgram);
+
+}

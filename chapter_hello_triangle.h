@@ -4,6 +4,8 @@
 #include "default_gl_include.h"
 #include "GLWindow.h"
 
-void drawTriangle();
+void drawTriangle(); // 使用VAO、VBO
+
+void drawRectangle(); // 在三角形基础上使用EBO
 
 #endif
