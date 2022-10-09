@@ -30,6 +30,8 @@ class Shader
 {
 public:
     Shader(const char *vertexPath, const char *fragmentPath);
+
+    ~Shader();
     
     void use();
 
@@ -50,7 +52,7 @@ public:
     void steMat3(const string &name, const glm::mat3 &value) const;
     void setMat4(const string &name, const glm::mat4 &value) const;
     
-    uint32_t ID;
+    uint32_t ID = 0;
     
 };
 
