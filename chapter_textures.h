@@ -5,4 +5,6 @@ void drawTriangleTexture();
 
 void drawRectangleTexture();
 
+void drawMixTexture();
+
 #endif

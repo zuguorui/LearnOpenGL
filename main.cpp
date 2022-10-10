@@ -19,6 +19,7 @@ int main()
     // testUniform();
     // testMoreAttribute();
     // drawTriangleTexture();
-    drawRectangleTexture();
+    // drawRectangleTexture();
+    drawMixTexture();
     return 0;
 }
