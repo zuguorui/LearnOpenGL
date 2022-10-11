@@ -5,6 +5,7 @@
 #include "chapter_hello_triangle.h"
 #include "chapter_shaders.h"
 #include "chapter_textures.h"
+#include "chapter_transform.h"
 
 using namespace std;
 
@@ -20,6 +21,7 @@ int main()
     // testMoreAttribute();
     // drawTriangleTexture();
     // drawRectangleTexture();
-    drawMixTexture();
+    // drawMixTexture();
+    testTransform();
     return 0;
 }

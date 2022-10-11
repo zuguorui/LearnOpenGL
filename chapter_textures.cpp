@@ -4,8 +4,7 @@
 #include "Shader.h"
 #include "util.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb/stb_image.h"
+#include "stb_include.h"
 
 #include <iostream>
 #include <stdlib.h>
@@ -250,7 +249,7 @@ void drawMixTexture() {
 
     unsigned int indices[] = {
         0, 3, 2,
-        2, 1, 0
+        0, 1, 2
     };
 
     GLuint VAO, VBO, EBO;
