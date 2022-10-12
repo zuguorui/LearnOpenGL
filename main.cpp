@@ -6,6 +6,7 @@
 #include "chapter_shaders.h"
 #include "chapter_textures.h"
 #include "chapter_transform.h"
+#include "chapter_coord.h"
 
 using namespace std;
 
@@ -22,6 +23,7 @@ int main()
     // drawTriangleTexture();
     // drawRectangleTexture();
     // drawMixTexture();
-    testTransform();
+    // testTransform();
+    draw3DCube();
     return 0;
 }

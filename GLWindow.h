@@ -22,6 +22,8 @@ public:
         Builder& setKeyCallback(GLFWkeyfun callback);
         Builder& setFrameSizeCallback(GLFWframebuffersizefun callback);
         GLWindow build();
+
+        
     private:
     
         char *title = nullptr;
