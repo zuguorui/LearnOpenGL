@@ -7,6 +7,7 @@
 #include "chapter_textures.h"
 #include "chapter_transform.h"
 #include "chapter_coord.h"
+#include "chapter_camera.h"
 
 using namespace std;
 
@@ -24,6 +25,7 @@ int main()
     // drawRectangleTexture();
     // drawMixTexture();
     // testTransform();
-    draw3DCube();
+    // draw3DCube();
+    testCamera();
     return 0;
 }
