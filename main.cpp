@@ -26,6 +26,8 @@ int main()
     // drawMixTexture();
     // testTransform();
     // draw3DCube();
-    testCamera();
+    // testCamera();
+    // fpsCamera();
+    testCameraClass();
     return 0;
 }

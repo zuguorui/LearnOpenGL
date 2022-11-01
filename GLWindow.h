@@ -21,6 +21,7 @@ public:
         Builder& setSize(int width, int height);
         Builder& setKeyCallback(GLFWkeyfun callback);
         Builder& setFrameSizeCallback(GLFWframebuffersizefun callback);
+        Builder& setCursorPosCallback(GLFWcursorposfun callback);
         GLWindow build();
 
         
@@ -30,11 +31,13 @@ public:
         int width = 800;
         int height = 400;
         GLFWkeyfun keyCallback = nullptr;
+        GLFWcursorposfun cursorPosCallback = nullptr;
         GLFWframebuffersizefun frameSizeCallback = nullptr;
     };
 
 private:
-    GLWindow(const char *title, int width, int height, GLFWkeyfun keyCallback, GLFWframebuffersizefun frameSizeCallback);
+    GLWindow(const char *title, int width, int height, GLFWkeyfun keyCallback, GLFWcursorposfun cursorPosCallback, 
+                GLFWframebuffersizefun frameSizeCallback);
 };
 
 #endif

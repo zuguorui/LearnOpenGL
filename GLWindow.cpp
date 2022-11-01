@@ -45,6 +45,11 @@ GLWindow::Builder& GLWindow::Builder::setKeyCallback(GLFWkeyfun callback) {
     return *this;
 }
 
+GLWindow::Builder& GLWindow::Builder::setCursorPosCallback(GLFWcursorposfun callback) {
+    this->cursorPosCallback = callback;
+    return *this;
+}
+
 GLWindow::Builder& GLWindow::Builder::setFrameSizeCallback(GLFWframebuffersizefun callback) {
     this->frameSizeCallback = callback;
     return *this;
@@ -55,6 +60,7 @@ GLWindow GLWindow::Builder::build() {
         this->title == nullptr ? "No title" : this->title,
         this->width, this->height,
         this->keyCallback == nullptr ? defaultKeyCallback : this->keyCallback,
+        this->cursorPosCallback,
         this->frameSizeCallback == nullptr ? defaultFrameBufferSizeCallback : this->frameSizeCallback
     );
 }
@@ -66,7 +72,8 @@ GLWindow::GLWindow(GLWindow&& src) {
     
 }
 
-GLWindow::GLWindow(const char *title, int width, int height, GLFWkeyfun keyCallback, GLFWframebuffersizefun frameSizeCallback) {
+GLWindow::GLWindow(const char *title, int width, int height, GLFWkeyfun keyCallback, GLFWcursorposfun cursorPosCallback,     
+                    GLFWframebuffersizefun frameSizeCallback) {
     printf("GLWindow: constructor\n");
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -85,7 +92,15 @@ GLWindow::GLWindow(const char *title, int width, int height, GLFWkeyfun keyCallb
     }
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, frameSizeCallback);
-    glfwSetKeyCallback(window, defaultKeyCallback);
+
+    if (keyCallback) {
+        glfwSetKeyCallback(window, keyCallback);
+    }
+
+    if (cursorPosCallback) {
+        glfwSetCursorPosCallback(window, cursorPosCallback);
+    }
+    
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         printf("glad load failed\n");
