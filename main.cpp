@@ -8,6 +8,7 @@
 #include "chapter_transform.h"
 #include "chapter_coord.h"
 #include "chapter_camera.h"
+#include "chapter_light.h"
 
 using namespace std;
 
@@ -28,6 +29,7 @@ int main()
     // draw3DCube();
     // testCamera();
     // fpsCamera();
-    testCameraClass();
+    // testCameraClass();
+    testLight();
     return 0;
 }

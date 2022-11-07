@@ -6,4 +6,5 @@ void testCamera();
 void fpsCamera();
 
 void testCameraClass();
+
 #endif

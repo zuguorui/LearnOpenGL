@@ -11,8 +11,8 @@
 
 using namespace std;
 
-const unsigned int SRC_WIDTH = 800;
-const unsigned int SRC_HEIGHT = 600;
+const static unsigned int SRC_WIDTH = 800;
+const static unsigned int SRC_HEIGHT = 600;
 
 void testCamera()
 {
@@ -194,20 +194,21 @@ void testCamera()
 }
 
 
-float lastX = SRC_WIDTH / 2.0f;
-float lastY = SRC_HEIGHT / 2.0f;
+static float lastX = SRC_WIDTH / 2.0f;
+static float lastY = SRC_HEIGHT / 2.0f;
 
 // 俯仰角，定义为视线方向与x-z平面的夹角。
-float pitch = 0;
+static float pitch = 0;
 // 水平角，定义为视线方向与x-y平面的夹角，也就是视线在x-z平面上的投影与x轴夹角。
 // 这里设为-90度，可以保证初始时的视角朝向z轴负方向。
-float yaw = -90.0f;
+static float yaw = -90.0f;
 
-float sensitivity = 0.2f;
+static float sensitivity = 0.2f;
 
-bool firstMouse = true;
+// 过滤第一次鼠标指针造成的跳变
+static bool firstMouse = true;
 
-void mouse_callback(GLFWwindow *window, double xPos, double yPos) {
+static void mouse_callback(GLFWwindow *window, double xPos, double yPos) {
     cout << "mouse_callback thread id = " << this_thread::get_id() << endl;
     if (firstMouse) {
         lastX = xPos;
@@ -235,9 +236,9 @@ void mouse_callback(GLFWwindow *window, double xPos, double yPos) {
     yaw += xOffset;
 }
 
-float fov = 45.0f;
+static float fov = 45.0f;
 
-void scroll_callback(GLFWwindow *window, double xOffset, double yOffset) {
+static void scroll_callback(GLFWwindow *window, double xOffset, double yOffset) {
     float tFov = fov - yOffset;
     if (tFov < 1.0f) {
         tFov = 1.0f;
@@ -257,6 +258,8 @@ void fpsCamera()
     glfwSetScrollCallback(glWindow.window, scroll_callback);
 
     glEnable(GL_DEPTH_TEST);
+
+    // 禁用光标
     glfwSetInputMode(glWindow.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     Shader mShader("./shaders/3d_cube.vs", "./shaders/3d_cube.frag");
@@ -368,8 +371,11 @@ void fpsCamera()
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
 
+    // 摄像机的向上方向向量，实际就是世界坐标系的y轴正方向
     glm::vec3 cameraUp(0.0f, 1.0f, 0.0f);
+    // 摄像机的位置坐标
     glm::vec3 cameraPos(0.0f, 0.0f, 3.0f);
+    // 摄像机的视角方向向量。
     glm::vec3 cameraFront(0.0f, 0.0f, -1.0f);
 
     float cameraSpeed = 0.1f;
@@ -390,6 +396,7 @@ void fpsCamera()
 
         if (glfwGetKey(glWindow.window, GLFW_KEY_W) == GLFW_PRESS)
         {
+            // 这里是将cameraFront作为位移来改变位置
             cameraPos += cameraFront * cameraSpeed;
         }
         if (glfwGetKey(glWindow.window, GLFW_KEY_S) == GLFW_PRESS)
@@ -404,7 +411,10 @@ void fpsCamera()
         {
             cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
         }
-        
+        // 注意pos和front的关系。lookAt函数接受摄像机位置和观察目标位置、世界坐标系的上方向。这里无需具体指定观察
+        // 位置，因为我们只要视线方向能够变化即可。也就是只要目标位置与摄像机相对位置变化即可。这也就是为什么可以在上一步
+        // 将front归一化。
+        // 这里使用cameraPos + cameraFront来表示目标位置。
         glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         mShader.setMat4("view", view);
         glBindVertexArray(VAO);
@@ -433,7 +443,7 @@ void fpsCamera()
 }
 
 
-FPSCamera camera = FPSCamera::Builder()
+static FPSCamera camera = FPSCamera::Builder()
         .setFov(45.0)
         .setFovRation(SRC_WIDTH * 1.0f / SRC_HEIGHT)
         .setPitch(0)
@@ -444,7 +454,7 @@ FPSCamera camera = FPSCamera::Builder()
         .setWorldUp(glm::vec3(0, 1.0f, 0))
         .build();
 
-void mouse_callback1(GLFWwindow *window, double xPos, double yPos) {
+static void mouse_callback1(GLFWwindow *window, double xPos, double yPos) {
     if (firstMouse) {
         lastX = xPos;
         lastY = yPos;
@@ -460,7 +470,7 @@ void mouse_callback1(GLFWwindow *window, double xPos, double yPos) {
     camera.updateDirection(yOffset, xOffset);
 }
 
-void scroll_callback1(GLFWwindow *window, double xOffset, double yOffset) {
+static void scroll_callback1(GLFWwindow *window, double xOffset, double yOffset) {
     camera.updateFov(yOffset);
 }
 
