@@ -17,7 +17,7 @@ void draw3DCube() {
 
     glEnable(GL_DEPTH_TEST);
 
-    Shader mShader("./shaders/3d_cube.vs", "./shaders/3d_cube.frag");
+    Shader mShader("./shaders/3d_texture_cube.vs", "./shaders/3d_texture_cube.frag");
 
     uint8_t *data = nullptr;
     int width, height, numChannels;
