@@ -173,6 +173,117 @@ void testLight()
         cubeShader.setVec3("cubeColor", 1.0f, 0.5f, 0.31f);
         cubeShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
         cubeShader.setVec3("lightPos", lightPos);
+        cubeShader.setVec3("viewPos", camera.pos);
+
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glBindVertexArray(0);
+
+        lightShader.use();
+        glBindVertexArray(light_VAO);
+        lightShader.setMat4("projection", camera.projection);
+        lightShader.setMat4("view", camera.view);
+        glm::mat4 lightModel(1.0f);
+        lightModel = glm::translate(lightModel, lightPos);
+        lightModel = glm::scale(lightModel, glm::vec3(0.2f));
+        lightShader.setMat4("model", lightModel);
+        lightShader.setVec3("cubeColor", 1.0f, 1.0f, 1.0f);
+
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        glBindVertexArray(0);
+
+        glfwSwapBuffers(glWindow.window);
+        glfwPollEvents();
+    }
+
+    glDeleteBuffers(1, &VBO);
+    glDeleteVertexArrays(1, &cube_VAO);
+    glDeleteVertexArrays(1, &light_VAO);
+}
+
+void testMaterial() {
+    GLWindow glWindow = GLWindow::Builder().setSize(SRC_WIDTH, SRC_HEIGHT).build();
+    glfwSetCursorPosCallback(glWindow.window, mouse_callback);
+    glEnable(GL_DEPTH_TEST);
+    glfwSetInputMode(glWindow.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    GLuint VBO;
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), (const void *)vertices, GL_STATIC_DRAW);
+
+    GLuint cube_VAO;
+    glGenVertexArrays(1, &cube_VAO);
+    glBindVertexArray(cube_VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (const void *)0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (const void *)(3 * sizeof(float)));
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glBindVertexArray(0);
+    
+
+
+    GLuint light_VAO;
+    glGenVertexArrays(1, &light_VAO);
+    glBindVertexArray(light_VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (const void *)0);
+    glEnableVertexAttribArray(0);
+    glBindVertexArray(0);
+
+
+    Shader cubeShader("./shaders/material_cube.vs", "./shaders/material_cube.frag");
+    Shader lightShader("./shaders/3d_color_cube.vs", "./shaders/3d_color_cube.frag");
+    cubeShader.use();
+    lightShader.use();
+
+    
+
+    double lastTime = glfwGetTime();
+    Direction direction = Direction::NONE;
+
+    while (!glfwWindowShouldClose(glWindow.window))
+    {
+        glClearColor(0.0, 0.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+    
+        direction = Direction::NONE;
+        if (glfwGetKey(glWindow.window, GLFW_KEY_W) == GLFW_PRESS)
+        {
+            direction = Direction::FORWARD;
+        }
+        if (glfwGetKey(glWindow.window, GLFW_KEY_S) == GLFW_PRESS)
+        {
+            direction = Direction::BACKWARD;
+        }
+        if (glfwGetKey(glWindow.window, GLFW_KEY_A) == GLFW_PRESS)
+        {
+            direction = Direction::LEFT;
+        }
+        if (glfwGetKey(glWindow.window, GLFW_KEY_D) == GLFW_PRESS)
+        {
+            direction = Direction::RIGHT;
+        }
+
+        camera.updatePos(direction, (float)(glfwGetTime() - lastTime));
+        lastTime = glfwGetTime();
+
+        cubeShader.use();
+        glBindVertexArray(cube_VAO);
+        cubeShader.setMat4("projection", camera.projection);
+        cubeShader.setMat4("view", camera.view);
+        glm::mat4 cubeModel(1.0f);
+        cubeShader.setMat4("model", cubeModel);
+        cubeShader.setVec3("cubeColor", 1.0f, 0.5f, 0.31f);
+        cubeShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+        cubeShader.setVec3("lightPos", lightPos);
+        cubeShader.setVec3("viewPos", camera.pos);
+        cubeShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+        cubeShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+        cubeShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+        cubeShader.setFloat("material.shininess", 32.0f);
 
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);

@@ -30,6 +30,7 @@ int main()
     // testCamera();
     // fpsCamera();
     // testCameraClass();
-    testLight();
+    //testLight();
+    testMaterial();
     return 0;
 }

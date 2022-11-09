@@ -3,4 +3,6 @@
 
 void testLight();
 
+void testMaterial();
+
 #endif
