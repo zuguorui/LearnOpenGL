@@ -243,6 +243,8 @@ void testMaterial() {
     double lastTime = glfwGetTime();
     Direction direction = Direction::NONE;
 
+    glm::vec3 lightColor(0.0f);
+
     while (!glfwWindowShouldClose(glWindow.window))
     {
         glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -270,6 +272,13 @@ void testMaterial() {
         camera.updatePos(direction, (float)(glfwGetTime() - lastTime));
         lastTime = glfwGetTime();
 
+        lightColor.r = sin(glfwGetTime() * 2.0f);
+        lightColor.g = sin(glfwGetTime() * 0.7f);
+        lightColor.b = sin(glfwGetTime() * 1.3f);
+
+        glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
+        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+
         cubeShader.use();
         glBindVertexArray(cube_VAO);
         cubeShader.setMat4("projection", camera.projection);
@@ -277,13 +286,15 @@ void testMaterial() {
         glm::mat4 cubeModel(1.0f);
         cubeShader.setMat4("model", cubeModel);
         cubeShader.setVec3("cubeColor", 1.0f, 0.5f, 0.31f);
-        cubeShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-        cubeShader.setVec3("lightPos", lightPos);
         cubeShader.setVec3("viewPos", camera.pos);
         cubeShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
         cubeShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
         cubeShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
         cubeShader.setFloat("material.shininess", 32.0f);
+        cubeShader.setVec3("light.ambient", ambientColor);
+        cubeShader.setVec3("light.diffuse", diffuseColor);
+        cubeShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+        cubeShader.setVec3("light.position", lightPos);
 
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
@@ -296,7 +307,7 @@ void testMaterial() {
         lightModel = glm::translate(lightModel, lightPos);
         lightModel = glm::scale(lightModel, glm::vec3(0.2f));
         lightShader.setMat4("model", lightModel);
-        lightShader.setVec3("cubeColor", 1.0f, 1.0f, 1.0f);
+        lightShader.setVec3("cubeColor", lightColor);
 
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
