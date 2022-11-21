@@ -9,4 +9,6 @@ std::string readShaderProgram(const char *path);
 bool checkShaderCompileStatus(unsigned int shader);
 
 bool checkProgramLinkStatus(unsigned int program);
+
+unsigned int loadTexture(const char *path);
 #endif

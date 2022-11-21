@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include "default_gl_include.h"
+#include "stb_include.h"
 
 using namespace std;
 
@@ -47,4 +48,38 @@ bool checkProgramLinkStatus(unsigned int program) {
         return false;
     }
     return true;
+}
+
+unsigned int loadTexture(const char *path) {
+    int width, height, numChannels;
+    uint8_t *data = nullptr;
+
+    data = stbi_load("./images/container2.png", &width, &height, &numChannels, 0);
+
+    if (!data) {
+        cout << "load image failed" << endl;
+        return 0;
+    }
+
+    GLenum format = GL_RGB;
+    if (numChannels == 1) {
+        numChannels = GL_RED;
+    } else if (numChannels == 3) {
+        format = GL_RGB;
+    } else if (numChannels == 4) {
+        format = GL_RGBA;
+    }
+
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    stbi_image_free(data);
+    return texture;
 }

@@ -5,4 +5,10 @@ void testLight();
 
 void testMaterial();
 
+void testLightMap();
+
+void testParallelLight();
+
+void testPointLight();
+
 #endif
