@@ -642,10 +642,6 @@ void testPointLight() {
     Shader cubeShader("./shaders/point_light.vs", "./shaders/point_light.frag");
     cubeShader.use();
 
-    Shader lightShader("./shaders/3d_color_cube.vs", "./shaders/3d_color_cube.frag");
-    lightShader.use();
-
-    
     cubeShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
     cubeShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
     cubeShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
@@ -656,13 +652,17 @@ void testPointLight() {
     cubeShader.setFloat("light.quadratic", 0.032f);
     
     cubeShader.setFloat("material.shininess", 64.0f);
+    
     cubeShader.setInt("material.diffuse", 0);
     cubeShader.setInt("material.specular", 1);
-    
+
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, diffuseTexture);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, specularTexture);
+
+    Shader lightShader("./shaders/3d_color_cube.vs", "./shaders/3d_color_cube.frag");
+    lightShader.use();
 
     
 
@@ -695,7 +695,7 @@ void testPointLight() {
 
         
         glBindVertexArray(cube_VAO);
-
+        cubeShader.use();
         cubeShader.setMat4("projection", camera.projection);
         cubeShader.setMat4("view", camera.view);
         cubeShader.setVec3("viewPos", camera.pos);
@@ -712,6 +712,7 @@ void testPointLight() {
 
         
         glBindVertexArray(light_VAO);
+        lightShader.use();
         lightShader.setMat4("projection", camera.projection);
         lightShader.setMat4("view", camera.view);
         glm::mat4 lightModel(1.0f);
@@ -733,5 +734,144 @@ void testPointLight() {
     glDeleteBuffers(1, &texCoord_VBO);
     glDeleteVertexArrays(1, &cube_VAO);
 
+}
+
+void testSpotLight() {
+    GLWindow glWindow = GLWindow::Builder().setSize(SRC_WIDTH, SRC_HEIGHT).build();
+    glfwSetCursorPosCallback(glWindow.window, mouse_callback);
+    glEnable(GL_DEPTH_TEST);
+    glfwSetInputMode(glWindow.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    GLuint posVBO;
+    glGenBuffers(1, &posVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, posVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), (const void *)cube_vertices, GL_STATIC_DRAW);
+
+    GLuint cube_VAO;
+    GLuint normal_VBO, texCoord_VBO;
+    glGenVertexArrays(1, &cube_VAO);
+
+    glGenBuffers(1, &normal_VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, normal_VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_normals), (const void *)cube_normals, GL_STATIC_DRAW);
+
+    glGenBuffers(1, &texCoord_VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, texCoord_VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_tex_coords), (const void *)cube_tex_coords, GL_STATIC_DRAW);
+
+    glBindVertexArray(cube_VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, posVBO);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (const void *)0);
+    glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, normal_VBO);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (const void *)0);
+    glEnableVertexAttribArray(1);
+
+    glBindBuffer(GL_ARRAY_BUFFER, texCoord_VBO);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (const void *)0);
+    glEnableVertexAttribArray(2);
+    glBindVertexArray(0);
+
+
+
+    GLuint diffuseTexture = loadTexture("./images/container2.png");
+    if (diffuseTexture == 0) {
+        cout << "load texture failed" << endl;
+        return;
+    }
+
+    GLuint specularTexture = loadTexture("./images/container2_specular.png");
+    if (specularTexture == 0) {
+        cout << "load texture failed" << endl;
+        return;
+    }
+
+    Direction direction = Direction::NONE;
+    double lastTime = glfwGetTime();
+
+    Shader cubeShader("./shaders/spot_light.vs", "./shaders/spot_light.frag");
+    cubeShader.use();
+
+    cubeShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
+    cubeShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+    cubeShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+    cubeShader.setFloat("light.cutOff", glm::cos(glm::radians(20.0f)));
+    cubeShader.setFloat("light.outerCutOff", glm::cos(glm::radians(30.0f)));
+
+    cubeShader.setFloat("light.constant", 1.0f);
+    cubeShader.setFloat("light.linear", 0.09f);
+    cubeShader.setFloat("light.quadratic", 0.032f);
+    
+    cubeShader.setFloat("material.shininess", 64.0f);
+    
+    cubeShader.setInt("material.diffuse", 0);
+    cubeShader.setInt("material.specular", 1);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, diffuseTexture);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, specularTexture);
+
+
+    
+
+    while (!glfwWindowShouldClose(glWindow.window))
+    {
+        glClearColor(0.0, 0.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+    
+        direction = Direction::NONE;
+        if (glfwGetKey(glWindow.window, GLFW_KEY_W) == GLFW_PRESS)
+        {
+            direction = Direction::FORWARD;
+        }
+        if (glfwGetKey(glWindow.window, GLFW_KEY_S) == GLFW_PRESS)
+        {
+            direction = Direction::BACKWARD;
+        }
+        if (glfwGetKey(glWindow.window, GLFW_KEY_A) == GLFW_PRESS)
+        {
+            direction = Direction::LEFT;
+        }
+        if (glfwGetKey(glWindow.window, GLFW_KEY_D) == GLFW_PRESS)
+        {
+            direction = Direction::RIGHT;
+        }
+        camera.updatePos(direction, (float)(glfwGetTime() - lastTime));
+        lastTime = glfwGetTime();
+
+
+        
+        glBindVertexArray(cube_VAO);
+        cubeShader.use();
+        cubeShader.setMat4("projection", camera.projection);
+        cubeShader.setMat4("view", camera.view);
+        cubeShader.setVec3("viewPos", camera.pos);
+        cubeShader.setVec3("light.position", camera.pos);
+        cubeShader.setVec3("light.direction", camera.front);
+
+        for (int i = 0; i < NUM_CUBES; i++) {
+            glm::mat4 cubeModel(1.0f);
+            cubeModel = glm::translate(cubeModel, cube_pos[i]);
+            cubeModel = glm::rotate(cubeModel, glm::radians(i * 17.0f), glm::vec3(1.0f, 0.3f, 0.5f));
+            cubeShader.setMat4("model", cubeModel);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
+        
+        glBindVertexArray(0);
+
+        glfwSwapBuffers(glWindow.window);
+        glfwPollEvents();
+    }
+
+    glDeleteBuffers(1, &posVBO);
+    glDeleteBuffers(1, &normal_VBO);
+    glDeleteBuffers(1, &texCoord_VBO);
+    glDeleteVertexArrays(1, &cube_VAO);
 
 }
+
+

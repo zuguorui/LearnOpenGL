@@ -9,6 +9,7 @@
 #include "chapter_coord.h"
 #include "chapter_camera.h"
 #include "chapter_light.h"
+#include "chapter_model.h"
 
 using namespace std;
 
@@ -33,7 +34,9 @@ int main()
     // testLight();
     // testMaterial();
     // testLightMap();
-    testParallelLight();
+    // testParallelLight();
     // testPointLight();
+    // testSpotLight();
+    testLoadModel();
     return 0;
 }

@@ -29,6 +29,7 @@
                 "-L",
                 "/opt/homebrew/lib/",
                 "-lglfw",
+                "-lassimp",
                 "-std=c++17",
                 "-D__APPLE__"
             ],

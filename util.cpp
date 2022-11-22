@@ -3,6 +3,7 @@
 #include <sstream>
 #include "default_gl_include.h"
 #include "stb_include.h"
+#include <assimp/Importer.hpp>
 
 using namespace std;
 
@@ -50,11 +51,11 @@ bool checkProgramLinkStatus(unsigned int program) {
     return true;
 }
 
-unsigned int loadTexture(const char *path) {
+unsigned int loadTexture(const char *path, bool flipVertically, int wrapS, int wrapT, GLint magFilterMode, GLint minFilterMode) {
     int width, height, numChannels;
     uint8_t *data = nullptr;
-
-    data = stbi_load("./images/container2.png", &width, &height, &numChannels, 0);
+    stbi_set_flip_vertically_on_load(flipVertically);
+    data = stbi_load(path, &width, &height, &numChannels, 0);
 
     if (!data) {
         cout << "load image failed" << endl;
@@ -73,13 +74,49 @@ unsigned int loadTexture(const char *path) {
     GLuint texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilterMode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilterMode);
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
 
     stbi_image_free(data);
+    return texture;
+}
+
+GLuint loadTextureFromAssimp(const aiTexture* aiTex, bool flipVertically, int wrapS, int wrapT, GLint magFilterMode, GLint minFilterMode) {
+    if (aiTex == nullptr) {
+        return 0;
+    }
+    int width, height, numChannels;
+    uint8_t *data = nullptr;
+    stbi_set_flip_vertically_on_load(flipVertically);
+
+    if (aiTex->mHeight == 0) {
+        data = stbi_load_from_memory(reinterpret_cast<uint8_t *>(aiTex->pcData), aiTex->mWidth, &width, &height, &numChannels, 0);
+    } else {
+        data = stbi_load_from_memory(reinterpret_cast<uint8_t *>(aiTex->pcData), aiTex->mWidth * aiTex->mHeight, &width, &height, &numChannels, 0);
+    }
+
+    GLenum format = GL_RGB;
+    if (numChannels == 1) {
+        numChannels = GL_RED;
+    } else if (numChannels == 3) {
+        format = GL_RGB;
+    } else if (numChannels == 4) {
+        format = GL_RGBA;
+    }
+
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilterMode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilterMode);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
     return texture;
 }

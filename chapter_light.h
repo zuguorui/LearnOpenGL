@@ -11,4 +11,6 @@ void testParallelLight();
 
 void testPointLight();
 
+void testSpotLight();
+
 #endif
