@@ -10,6 +10,7 @@
 #include "chapter_camera.h"
 #include "chapter_light.h"
 #include "chapter_model.h"
+#include "chapter_advanced.h"
 
 using namespace std;
 
@@ -37,6 +38,7 @@ int main()
     // testParallelLight();
     // testPointLight();
     // testSpotLight();
-    testLoadModel();
+    // testLoadModel();
+    testFrameBuffer();
     return 0;
 }

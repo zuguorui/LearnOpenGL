@@ -2,8 +2,9 @@
 #define _DATA_H_
 
 #include "default_gl_include.h"
+#include "glm/glm.hpp"
 
-float cube_vertices[] = {
+static float cube_vertices[] = {
     -0.5f, -0.5f, -0.5f,
      0.5f, -0.5f, -0.5f,
      0.5f,  0.5f, -0.5f,
@@ -47,7 +48,7 @@ float cube_vertices[] = {
     -0.5f,  0.5f, -0.5f,
 };
 
-float cube_normals[] = {
+static float cube_normals[] = {
     0.0f,  0.0f, -1.0f,
     0.0f,  0.0f, -1.0f,
     0.0f,  0.0f, -1.0f,
@@ -91,7 +92,7 @@ float cube_normals[] = {
     0.0f,  1.0f,  0.0f,
 };
 
-float cube_tex_coords[] = {
+static float cube_tex_coords[] = {
     0.0f,  0.0f,
     1.0f,  0.0f,
     1.0f,  1.0f,
@@ -135,9 +136,9 @@ float cube_tex_coords[] = {
     0.0f,  1.0f
 };
 
-const int NUM_CUBES = 10;
+static int NUM_CUBES = 10;
 
-glm::vec3 cube_pos[] = {
+static glm::vec3 cube_pos[] = {
         glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(2.0f, 5.0f, -15.0f),
         glm::vec3(-1.5f, -2.2f, -2.5f),
