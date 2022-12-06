@@ -13,7 +13,10 @@
             "cwd": "${workspaceFolder}",
             "externalConsole": false,
             "MIMode": "lldb",
-            "preLaunchTask": "C/C++: clang++ build active file"
+            "preLaunchTask": "C/C++: clang++ build active file",
+            "logging": {
+                "moduleLoad": false
+            }
         }
     ]
 }

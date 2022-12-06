@@ -6,12 +6,11 @@
 #include "stb_include.h"
 #include "default_gl_include.h"
 #include "util.h"
-#include "data.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
 
 
-void yuv444p_to_rgb();
+void yuv_to_rgb();
 
 #endif

@@ -41,6 +41,6 @@ int main()
     // testSpotLight();
     // testLoadModel();
     // testFrameBuffer();
-    yuv444p_to_rgb();
+    yuv_to_rgb();
     return 0;
 }
