@@ -16,4 +16,6 @@ GLuint loadTexture(const char *path, bool flipVertically = true, int wrapS = GL_
 
 GLuint loadTextureFromAssimp(const aiTexture* aiTex, bool flipVertically = true, int wrapS = GL_CLAMP_TO_EDGE, int wrapT = GL_CLAMP_TO_EDGE, GLint magFilterMode = GL_NEAREST, GLint minFilterMode = GL_LINEAR);
 
+
+
 #endif

@@ -151,4 +151,11 @@ static glm::vec3 cube_pos[] = {
         glm::vec3(-1.3f, 1.0f, -1.5f)
 };
 
+static float rect_vertices[] = {
+        // vertex pos         // tex coords
+        -0.5f, -0.5f,  0.0f,  0.0f, 0.0f, // left-bottom
+         0.5f, -0.5f,  0.0f,  1.0f, 0.0f, // right-bottom
+         0.5f,  0.5f,  0.0f,  1.0f, 1.0f, // right-top
+        -0.5f,  0.5f,  0.0f,  0.0f, 1.0f, // left-top
+    };
 #endif

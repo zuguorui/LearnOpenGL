@@ -11,6 +11,7 @@
 #include "chapter_light.h"
 #include "chapter_model.h"
 #include "chapter_advanced.h"
+#include "yuv2rgb.h"
 
 using namespace std;
 
@@ -39,6 +40,7 @@ int main()
     // testPointLight();
     // testSpotLight();
     // testLoadModel();
-    testFrameBuffer();
+    // testFrameBuffer();
+    yuv444p_to_rgb();
     return 0;
 }
