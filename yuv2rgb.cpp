@@ -5,38 +5,47 @@
 
 using namespace std;
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
-
 void yuv_to_rgb() {
-    GLWindow glWindow = GLWindow::Builder().setSize(SCREEN_WIDTH, SCREEN_HEIGHT).setTitle("yuv2rgb").build();
+    
 
-    const int SRC_WIDTH = 1536;
-    const int SRC_HEIGHT = 864;
-
+    int src_width;
+    int src_height;
+    int bit_depth;
     uint8_t **yuv = nullptr;
 
-    int y_width = SRC_WIDTH;
-    int y_height = SRC_HEIGHT;
+    // bool success = load_yuv444p(&src_width, &src_height, &bit_depth, &yuv);
+
+    // bool success = load_yuv420sp(&src_width, &src_height, &bit_depth, &yuv);
+
+    bool success = load_yuv420p10le(&src_width, &src_height, &bit_depth, &yuv);
+    // bool success = load_yuv420p16le(&src_width, &src_height, &bit_depth, &yuv);
+
+    GLWindow glWindow = GLWindow::Builder().setSize(src_width, src_height).setTitle("yuv2rgb").build();
+
+    
+
+    int y_width = src_width;
+    int y_height = src_height;
     
     // yuv444p
-    // const char *path = "assets/out-1536*864-444p.yuv";
-    // int u_width = SRC_WIDTH;
-    // int u_height = SRC_HEIGHT;
-    // int v_width = SRC_WIDTH;
-    // int v_height = SRC_HEIGHT;
-    // bool success = load_yuv444p(path, SRC_WIDTH, SRC_HEIGHT, &yuv);
+    // int u_width = y_width;
+    // int u_height = y_height;
+    // int v_width = y_width;
+    // int v_height = y_height;
+
     
     // yuv420p
-    // const char *path = "assets/out-1536*864-420p.yuv";
     // nv21
-    const char *path = "assets/out-1536*864-nv21.yuv";
-    int u_width = SRC_WIDTH / 2;
-    int u_height = SRC_HEIGHT / 2;
-    int v_width = SRC_WIDTH / 2;
-    int v_height = SRC_HEIGHT / 2;
-    // bool success = load_yuv420p(path, SRC_WIDTH, SRC_HEIGHT, &yuv);
-    bool success = load_yuv420sp(path, SRC_WIDTH, SRC_HEIGHT, &yuv);
+    int u_width = y_width / 2;
+    int u_height = y_height / 2;
+    int v_width = y_width / 2;
+    int v_height = y_height / 2;
+    
+    int dataFormat = GL_UNSIGNED_BYTE;
+    if (bit_depth > 8) {
+        dataFormat = GL_UNSIGNED_SHORT;
+    }
+
 
 
     if (!success) {
@@ -52,7 +61,7 @@ void yuv_to_rgb() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, y_width, y_height, 0, GL_RED, GL_UNSIGNED_BYTE, yuv[0]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, y_width, y_height, 0, GL_RED, dataFormat, yuv[0]);
     glGenerateMipmap(GL_TEXTURE_2D);
 
     GLuint tex_u;
@@ -62,7 +71,7 @@ void yuv_to_rgb() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, u_width, u_height, 0, GL_RED, GL_UNSIGNED_BYTE, yuv[1]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, u_width, u_height, 0, GL_RED, dataFormat, yuv[1]);
     glGenerateMipmap(GL_TEXTURE_2D);
 
     GLuint tex_v;
@@ -72,7 +81,7 @@ void yuv_to_rgb() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, v_width, v_height, 0, GL_RED, GL_UNSIGNED_BYTE, yuv[2]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, v_width, v_height, 0, GL_RED, dataFormat, yuv[2]);
     glGenerateMipmap(GL_TEXTURE_2D);
 
     free(yuv[0]);
@@ -119,7 +128,12 @@ void yuv_to_rgb() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    Shader mShader("./shaders/yuv_rgb.vs", "./shaders/yuv_rgb.frag");
+    string fragmentShaderPath = "./shaders/yuv_rgb.frag";
+    if (bit_depth == 10) {
+        fragmentShaderPath = "./shaders/yuv10_rgb.frag";
+    }
+
+    Shader mShader("./shaders/yuv_rgb.vs", fragmentShaderPath.c_str());
 
     mShader.use();
     mShader.setInt("tex_y", 0);

@@ -17,8 +17,20 @@ using namespace std;
 
 // https://learnopengl-cn.readthedocs.io/zh/latest
 
+void be_le() {
+    int16_t *a = (int16_t *)malloc(1 * sizeof(int16_t));
+    a[0] = 0x1234;
+    int8_t *b = (int8_t *)a;
+    uint8_t c = b[0];
+    uint8_t d = b[1];
+
+    printf("c = 0x%x, d = 0x%x", c, d);
+}
+
 int main()
 {
+    float ra = 0x00FFFF * 1.0f / 0x0003FF;
+    printf("ra = %f\n", ra);
     // createWindow();
     // drawTriangle();
     // drawRectangle();
@@ -42,5 +54,8 @@ int main()
     // testLoadModel();
     // testFrameBuffer();
     yuv_to_rgb();
+    // be_le();
+
+    
     return 0;
 }
