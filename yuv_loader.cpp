@@ -174,38 +174,38 @@ bool load_yuv420p10le(int *width, int *height, int *bit_depth, uint8_t ***yuv) {
     // YV12 -> YYYYYYYYVVUU
 
     int64_t readCount = 0;
-    // uint16_t x;
-    // for (int i = 0; i < y_count; i++) {
-    //     fread(&x, sizeof(uint16_t), 1, f);
-    //     x <<= 6;
-    //     y[i] = x;
-    // }
+    
     readCount = fread(y, sizeof(uint16_t), y_count, f);
     if (readCount != y_count) {
         printf("read y error: expected count = %lld, read count = %lld\n", y_count, readCount);
     }
 
-    // for (int i = 0; i < u_count; i++) {
-    //     fread(&x, sizeof(uint16_t), 1, f);
-    //     x <<= 6;
-    //     u[i] = x;
-    // }
+    // The higher 6 bits is padding 0. The OpenGL convert 10bit color to float by deviding UINT16_MAX.
+    // The raw data will be converted to a very small float in shader and we must multuply (0xFFFF / 0x03FF)
+    // to convert to normal color.
+    // So we shift data to left by 6 bits to avoid lossness, and we don't need do extern job in shader, all
+    // yuv format can use same shader.
+    for (int i = 0; i < y_count; i++) {
+        y[i] <<= 6;
+    }
+
     readCount = fread(u, sizeof(uint16_t), u_count, f);
     if (readCount != u_count) {
         printf("read u error: expected count = %lld, read count = %lld\n", u_count, readCount);
     }
 
-    // for (int i = 0; i < v_count; i++) {
-    //     fread(&x, sizeof(uint16_t), 1, f);
-    //     x <<= 6;
-    //     v[i] = x;
-    // }
+    for (int i = 0; i < u_count; i++) {
+        u[i] <<= 6;
+    }
 
     readCount = fread(v, sizeof(uint16_t), v_count, f);
     if (readCount != v_count) {
         printf("read v error: expected count = %lld, read count = %lld\n", v_count, readCount);
     }
     
+    for (int i = 0; i < v_count; i++) {
+        v[i] <<= 6;
+    }
 
     fclose(f);
     

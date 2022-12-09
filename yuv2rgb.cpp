@@ -129,9 +129,7 @@ void yuv_to_rgb() {
     glBindVertexArray(0);
 
     string fragmentShaderPath = "./shaders/yuv_rgb.frag";
-    if (bit_depth == 10) {
-        fragmentShaderPath = "./shaders/yuv10_rgb.frag";
-    }
+    
 
     Shader mShader("./shaders/yuv_rgb.vs", fragmentShaderPath.c_str());
 
