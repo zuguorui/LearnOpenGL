@@ -1,4 +1,4 @@
-#include "yuv_loader.h"
+#include "pixel_loader.h"
 
 #include <algorithm>
 
@@ -284,3 +284,99 @@ bool load_yuv420p16le(int *width, int *height, int *bit_depth, uint8_t ***yuv) {
 
     return true;
 }
+
+bool load_rgb565(int *width, int *height, int *rDepth, int *gDepth, int *bDepth, uint8_t **data, int64_t *dataSize) {
+    const int SRC_WIDTH = 1536;
+    const int SRC_HEIGHT = 864;
+
+    const char *path = "assets/out-1536*864-rgb565le.rgb";
+    *width = SRC_WIDTH;
+    *height = SRC_HEIGHT;
+
+    FILE *f = fopen(path, "rb");
+    if (f == nullptr) {
+        return false;
+    }
+
+
+    *rDepth = 5;
+    *gDepth = 6;
+    *bDepth = 5;
+
+    int64_t pixelCount = (*width) * (*height);
+
+    *dataSize = pixelCount * 3;
+
+    int64_t fs = ftell(f);
+    fseek(f, 0, SEEK_END);
+    int64_t fe = ftell(f);
+    int64_t fSize = fe - fs;
+    fseek(f, 0, SEEK_SET);
+
+    uint16_t *rawData = (uint16_t *)malloc(fSize);
+
+    fread(rawData, sizeof(int16_t), pixelCount, f);
+
+    fseek(f, 0, SEEK_SET);
+
+    *data = (uint8_t *)malloc(pixelCount * 3);
+
+    const static int R_MASK = 0x00F8;
+    const static int G_MASK = 0x00FC;
+    const static int B_MASK = 0x00F8;
+
+    const static int R_SHIFT = 8;
+    const static int G_SHIFT = 3;
+    const static int B_SHIFT = 3;
+
+    uint16_t t;
+    for (int i = 0; i < pixelCount; i++) {
+        t = rawData[i];
+
+        (*data)[3 * i] = (uint8_t)((t >> R_SHIFT) & R_MASK);
+        (*data)[3 * i + 1] = (uint8_t)((t >> G_SHIFT) & G_MASK);
+        (*data)[3 * i + 2] = (uint8_t)((t << B_SHIFT) & B_MASK);
+    }
+
+    fclose(f);
+
+    return true;
+
+}
+
+bool load_raw_rgb565(int *width, int *height, int *rDepth, int *gDepth, int *bDepth, uint8_t **data, int64_t *dataSize) {
+    const int SRC_WIDTH = 1536;
+    const int SRC_HEIGHT = 864;
+
+    const char *path = "assets/out-1536*864-rgb565le.rgb";
+    *width = SRC_WIDTH;
+    *height = SRC_HEIGHT;
+
+    FILE *f = fopen(path, "rb");
+    if (f == nullptr) {
+        return false;
+    }
+
+
+    *rDepth = 5;
+    *gDepth = 6;
+    *bDepth = 5;
+
+
+    int64_t fs = ftell(f);
+    fseek(f, 0, SEEK_END);
+    int64_t fe = ftell(f);
+    int64_t fSize = fe - fs;
+    fseek(f, 0, SEEK_SET);
+
+    *dataSize = fSize;
+
+    *data = (uint8_t *)malloc(fSize);
+
+    fread(*data, 1, fSize, f);
+
+    fclose(f);
+
+    return true;
+}
+

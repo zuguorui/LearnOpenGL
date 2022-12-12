@@ -13,6 +13,8 @@
 
 void yuv_to_rgb();
 
+void rgb565_to_rgb888();
 
+void display_raw_rgb565();
 
 #endif

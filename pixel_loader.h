@@ -17,4 +17,8 @@ bool load_yuv420p10le(int *width, int *height, int *bit_depth, uint8_t ***yuv);
 
 bool load_yuv420p16le(int *width, int *height, int *bit_depth, uint8_t ***yuv);
 
+bool load_rgb565(int *width, int *height, int *rDepth, int *gDepth, int *bDepth, uint8_t **data, int64_t *dataSize);
+
+bool load_raw_rgb565(int *width, int *height, int *rDepth, int *gDepth, int *bDepth, uint8_t **data, int64_t *dataSize);
+
 #endif

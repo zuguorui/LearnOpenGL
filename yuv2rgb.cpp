@@ -1,6 +1,6 @@
 #include "yuv2rgb.h"
 
-#include "yuv_loader.h"
+#include "pixel_loader.h"
 #include "default_gl_include.h"
 
 using namespace std;
@@ -172,4 +172,209 @@ void yuv_to_rgb() {
 
 
 
+}
+
+
+
+void rgb565_to_rgb888() {
+    int src_width;
+    int src_height;
+    uint8_t *data = nullptr;
+    int64_t dataSize;
+
+    int rDepth;
+    int gDepth;
+    int bDepth;
+
+    bool success = load_rgb565(&src_width, &src_height, &rDepth, &gDepth, &bDepth, &data, &dataSize);
+
+    if (!success) {
+        cout << "load data failed" << endl;
+        return;
+    }
+
+    GLWindow glWindow = GLWindow::Builder().setSize(src_width, src_height).setTitle("rgb565").build();
+
+    
+
+    GLuint tex_rgb;
+    glGenTextures(1, &tex_rgb);
+
+    GLenum dataFormat = GL_UNSIGNED_BYTE;
+
+    glBindTexture(GL_TEXTURE_2D, tex_rgb);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, src_width, src_height, 0, GL_RGB, dataFormat, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+
+
+    float vertices[] = {
+        // vertex pos         // tex coords
+        -1.0f, -1.0f,  0.0f,  0.0f, 1.0f, // view left-bottom to tex left-top
+         1.0f, -1.0f,  0.0f,  1.0f, 1.0f, // view right-bottom to tex right-top
+         1.0f,  1.0f,  0.0f,  1.0f, 0.0f, // view right-top to tex right-bottom
+        -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, // view left-top to tex left-bottom
+    };
+
+    unsigned int indices[] = {
+        0, 3, 2,
+        2, 1, 0
+    };
+
+    GLuint VAO, VBO, EBO;
+
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    Shader mShader("./shaders/rgb_packet.vs", "./shaders/rgb_packet.frag");
+
+    mShader.use();
+    mShader.setInt("tex_rgb", 0);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, tex_rgb);
+
+    while (!glfwWindowShouldClose(glWindow.window)) {
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        
+        mShader.use();
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+
+        glfwSwapBuffers(glWindow.window);
+        glfwPollEvents();
+    }
+
+    glDeleteBuffers(1, &VBO);
+    glDeleteVertexArrays(1, &VAO);
+
+    glDeleteTextures(1, &tex_rgb);
+
+}
+
+
+void display_raw_rgb565() {
+    int src_width;
+    int src_height;
+    uint8_t *data = nullptr;
+    int64_t dataSize;
+
+    int rDepth;
+    int gDepth;
+    int bDepth;
+
+    bool success = load_raw_rgb565(&src_width, &src_height, &rDepth, &gDepth, &bDepth, &data, &dataSize);
+
+    if (!success) {
+        cout << "load data failed" << endl;
+        return;
+    }
+
+    GLWindow glWindow = GLWindow::Builder().setSize(src_width, src_height).setTitle("rgb565").build();
+
+
+    GLuint tex_rgb;
+    glGenTextures(1, &tex_rgb);
+
+    GLenum dataFormat = GL_UNSIGNED_SHORT_5_6_5;
+
+    glBindTexture(GL_TEXTURE_2D, tex_rgb);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, src_width, src_height, 0, GL_RGB, dataFormat, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+
+
+    float vertices[] = {
+        // vertex pos         // tex coords
+        -1.0f, -1.0f,  0.0f,  0.0f, 1.0f, // view left-bottom to tex left-top
+         1.0f, -1.0f,  0.0f,  1.0f, 1.0f, // view right-bottom to tex right-top
+         1.0f,  1.0f,  0.0f,  1.0f, 0.0f, // view right-top to tex right-bottom
+        -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, // view left-top to tex left-bottom
+    };
+
+    unsigned int indices[] = {
+        0, 3, 2,
+        2, 1, 0
+    };
+
+    GLuint VAO, VBO, EBO;
+
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    Shader mShader("./shaders/rgb_packet.vs", "./shaders/rgb_packet.frag");
+
+    mShader.use();
+    mShader.setInt("tex_rgb", 0);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, tex_rgb);
+
+    while (!glfwWindowShouldClose(glWindow.window)) {
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        
+        mShader.use();
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+
+        glfwSwapBuffers(glWindow.window);
+        glfwPollEvents();
+    }
+
+    glDeleteBuffers(1, &VBO);
+    glDeleteVertexArrays(1, &VAO);
+
+    glDeleteTextures(1, &tex_rgb);
 }

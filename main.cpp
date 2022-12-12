@@ -53,7 +53,9 @@ int main()
     // testSpotLight();
     // testLoadModel();
     // testFrameBuffer();
-    yuv_to_rgb();
+    // yuv_to_rgb();
+    // rgb565_to_rgb888();
+    display_raw_rgb565();
     // be_le();
 
     
