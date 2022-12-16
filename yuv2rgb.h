@@ -17,4 +17,8 @@ void rgb565_to_rgb888();
 
 void display_raw_rgb565();
 
+void rgb444_rgb888();
+
+void display_dumps();
+
 #endif

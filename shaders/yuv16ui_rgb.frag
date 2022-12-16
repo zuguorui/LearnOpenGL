@@ -1,8 +1,8 @@
 #version 330 core
 
-uniform sampler2D tex_y;
-uniform sampler2D tex_u;
-uniform sampler2D tex_v;
+uniform usampler2D tex_y;
+uniform usampler2D tex_u;
+uniform usampler2D tex_v;
 
 in vec2 TexCoord;
 
@@ -32,9 +32,9 @@ void main() {
     // float b = y + 1.772 * u;
 
     // 部分色域BT709
-    float y = texture(tex_y, TexCoord).r - 0.0625f;
-    float u = texture(tex_u, TexCoord).r - 0.5f;
-    float v = texture(tex_v, TexCoord).r - 0.5f;
+    float y = float(texture(tex_y, TexCoord).r) - 0.0625f;
+    float u = float(texture(tex_u, TexCoord).r) - 0.5f;
+    float v = float(texture(tex_v, TexCoord).r) - 0.5f;
 
     float r = 1.164f * y + 1.793f * v;
     float g = 1.164f * y - 0.213f * u - 0.533f * v;

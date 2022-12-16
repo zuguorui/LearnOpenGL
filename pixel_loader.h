@@ -21,4 +21,8 @@ bool load_rgb565(int *width, int *height, int *rDepth, int *gDepth, int *bDepth,
 
 bool load_raw_rgb565(int *width, int *height, int *rDepth, int *gDepth, int *bDepth, uint8_t **data, int64_t *dataSize);
 
+bool load_rgb444(int *width, int *height, int *rDepth, int *gDepth, int *bDepth, uint8_t **data, int64_t *dataSize);
+
+bool load_raw_rgb444(int *width, int *height, int *rDepth, int *gDepth, int *bDepth, uint8_t **data, int64_t *dataSize);
+
 #endif

@@ -55,7 +55,9 @@ int main()
     // testFrameBuffer();
     // yuv_to_rgb();
     // rgb565_to_rgb888();
-    display_raw_rgb565();
+    // display_raw_rgb565();
+    // rgb444_rgb888();
+    display_dumps();
     // be_le();
 
     
