@@ -1,7 +1,7 @@
 #include "chapter_camera.h"
 #include "GLWindow.h"
 #include "Shader.h"
-#include "stb_include.h"
+#include "default_stb_include.h"
 #include "default_gl_include.h"
 #include "FPSCamera.h"
 

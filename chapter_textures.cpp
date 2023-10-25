@@ -4,7 +4,7 @@
 #include "Shader.h"
 #include "util.h"
 
-#include "stb_include.h"
+#include "default_stb_include.h"
 
 #include <iostream>
 #include <stdlib.h>

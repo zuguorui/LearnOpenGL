@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/glm/**",
+                "${workspaceFolder}/stb/**",
+                "${workspaceFolder}/glad/**",
+                "/opt/homebrew/include/**",
+                "/opt/homebrew/include/Imath"
+            ],
+            "defines": [
+                "__APPLE__"
+            ],
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks",
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework"
+            ],
+            "intelliSenseMode": "clang-x64",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}

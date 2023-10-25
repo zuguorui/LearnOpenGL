@@ -3,7 +3,7 @@
 #include "default_gl_include.h"
 #include "FPSCamera.h"
 #include "Shader.h"
-#include "stb_include.h"
+#include "default_stb_include.h"
 #include "util.h"
 #include "data.h"
 
@@ -795,14 +795,14 @@ void testSpotLight() {
     cubeShader.use();
 
     cubeShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-    cubeShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
-    cubeShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-    cubeShader.setFloat("light.cutOff", glm::cos(glm::radians(20.0f)));
-    cubeShader.setFloat("light.outerCutOff", glm::cos(glm::radians(30.0f)));
+    cubeShader.setVec3("light.diffuse", 1.7f, 1.7f, 1.7f);
+    cubeShader.setVec3("light.specular", 3.0f, 3.0f, 3.0f);
+    cubeShader.setFloat("light.cutOff", glm::cos(glm::radians(10.0f)));
+    cubeShader.setFloat("light.outerCutOff", glm::cos(glm::radians(40.0f)));
 
     cubeShader.setFloat("light.constant", 1.0f);
     cubeShader.setFloat("light.linear", 0.09f);
-    cubeShader.setFloat("light.quadratic", 0.032f);
+    cubeShader.setFloat("light.quadratic", 0.0032f);
     
     cubeShader.setFloat("material.shininess", 64.0f);
     

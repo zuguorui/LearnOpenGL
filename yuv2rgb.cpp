@@ -490,6 +490,7 @@ bool read_dump(const char *path, uint8_t **data, int64_t *count) {
     fseek(f, 0, SEEK_SET);
     fread(*data, 1, *count, f);
     fclose(f);
+    return true;
 }
 
 void display_dumps() {

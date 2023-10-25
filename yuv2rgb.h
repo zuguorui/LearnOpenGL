@@ -3,7 +3,7 @@
 
 #include "GLWindow.h"
 #include "Shader.h"
-#include "stb_include.h"
+#include "default_stb_include.h"
 #include "default_gl_include.h"
 #include "util.h"
 #include <stdlib.h>

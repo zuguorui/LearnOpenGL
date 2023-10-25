@@ -12,6 +12,7 @@
 #include "chapter_model.h"
 #include "chapter_advanced.h"
 #include "yuv2rgb.h"
+#include "chapter_hdr.h"
 
 using namespace std;
 
@@ -29,8 +30,6 @@ void be_le() {
 
 int main()
 {
-    float ra = 0x00FFFF * 1.0f / 0x0003FF;
-    printf("ra = %f\n", ra);
     // createWindow();
     // drawTriangle();
     // drawRectangle();
@@ -53,12 +52,14 @@ int main()
     // testSpotLight();
     // testLoadModel();
     // testFrameBuffer();
+    // testFaceCulling();
     // yuv_to_rgb();
     // rgb565_to_rgb888();
     // display_raw_rgb565();
     // rgb444_rgb888();
-    display_dumps();
+    // display_dumps();
     // be_le();
+    display_hdr_image();
 
     
     return 0;

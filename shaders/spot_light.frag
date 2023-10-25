@@ -11,10 +11,11 @@ struct Light {
     vec3 direction;
     float cutOff; // 内光圈
     float outerCutOff; // 外光圈
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+    vec3 ambient; // 环境光
+    vec3 diffuse; // 散射光
+    vec3 specular; // 反射光
 
+    // 光的衰减方程，是距离的二次函数。ratio = quadratic * dis ^ 2 + linear * dis + constant
     float constant;
     float linear;
     float quadratic;

@@ -103,7 +103,7 @@ void drawTriangle() {
     // 2. 缓存数据大小，单位是byte
     // 3. 数据指针
     // 4. 绘制类型。GL_STATIC_DRAW：数据几乎不变。GL_DYNAMIC_DRAW：数据会变很多。
-    // GL_DRAW_STREAM：每次绘制数据都会变。
+    //    GL_DRAW_STREAM：每次绘制数据都会变。
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // 参数说明：
