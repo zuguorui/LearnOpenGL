@@ -1,15 +1,16 @@
 add_rules("mode.debug", "mode.release")
 
 add_includedirs(
+    "./",
     "/opt/homebrew/include/", 
-    "/Users/zuguorui/VulkanSDK/1.3.261.1/macOS/include/",
     "/opt/homebrew/include/Imath/",
+    "/usr/local/include/",
     "stb"
     )
 
 add_linkdirs(
     "/opt/homebrew/lib/",
-    "/Users/zuguorui/VulkanSDK/1.3.261.1/macOS/lib"
+    "/usr/local/lib/"
     )
 
 add_links("glfw", "assimp", "OpenEXR", "Imath")

@@ -50,7 +50,7 @@ int main()
     // testParallelLight();
     // testPointLight();
     // testSpotLight();
-    // testLoadModel();
+    testLoadModel();
     // testFrameBuffer();
     // testFaceCulling();
     // yuv_to_rgb();
@@ -59,7 +59,7 @@ int main()
     // rgb444_rgb888();
     // display_dumps();
     // be_le();
-    display_hdr_image();
+    //display_hdr_image();
 
     
     return 0;
