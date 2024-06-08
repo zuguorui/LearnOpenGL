@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10.0)
 project(LearnOpenGL)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -30,10 +30,10 @@ file(GLOB SRC_FILES
     ./stb/*.c
 )
 
-add_executable(LearnOpenGL ${SRC_FILES})
+add_executable(main.out ${SRC_FILES})
 
 target_link_libraries(
-    LearnOpenGL
+    main.out
     "-framework IOKit"
     "-framework Cocoa"
     "-framework CoreVideo"
