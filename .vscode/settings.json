@@ -1,3 +1,6 @@
 {
-    "xmake.compileCommandsDirectory": "build"
+    "xmake.compileCommandsDirectory": "build",
+    "clangd.arguments": [
+        "-compile-commands-dir=./build"
+    ]
 }

@@ -56,8 +56,6 @@ void testLoadModel() {
     shader.use();
     shader.setMat4("model", glm::mat4(1.0f));
 
-
-
     Direction direction = Direction::NONE;
     double lastTime = glfwGetTime();
 
@@ -68,20 +66,16 @@ void testLoadModel() {
         
     
         direction = Direction::NONE;
-        if (glfwGetKey(glWindow.window, GLFW_KEY_W) == GLFW_PRESS)
-        {
+        if (glfwGetKey(glWindow.window, GLFW_KEY_W) == GLFW_PRESS) {
             direction = Direction::FORWARD;
         }
-        if (glfwGetKey(glWindow.window, GLFW_KEY_S) == GLFW_PRESS)
-        {
+        if (glfwGetKey(glWindow.window, GLFW_KEY_S) == GLFW_PRESS) {
             direction = Direction::BACKWARD;
         }
-        if (glfwGetKey(glWindow.window, GLFW_KEY_A) == GLFW_PRESS)
-        {
+        if (glfwGetKey(glWindow.window, GLFW_KEY_A) == GLFW_PRESS) {
             direction = Direction::LEFT;
         }
-        if (glfwGetKey(glWindow.window, GLFW_KEY_D) == GLFW_PRESS)
-        {
+        if (glfwGetKey(glWindow.window, GLFW_KEY_D) == GLFW_PRESS) {
             direction = Direction::RIGHT;
         }
         camera.updatePos(direction, (float)(glfwGetTime() - lastTime));

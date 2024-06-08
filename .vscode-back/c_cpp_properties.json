@@ -3,12 +3,11 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**",
-                "${workspaceFolder}/glm/**",
-                "${workspaceFolder}/stb/**",
-                "${workspaceFolder}/glad/**",
-                "/opt/homebrew/include/**",
-                "/opt/homebrew/include/Imath"
+                "./",
+    "/opt/homebrew/include/", 
+    "/opt/homebrew/include/Imath/",
+    "/usr/local/include/",
+    "stb"
             ],
             "defines": [
                 "__APPLE__"
