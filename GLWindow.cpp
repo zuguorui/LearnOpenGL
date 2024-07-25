@@ -79,6 +79,7 @@ GLWindow::GLWindow(const char *title, int width, int height, GLFWkeyfun keyCallb
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -90,6 +91,9 @@ GLWindow::GLWindow(const char *title, int width, int height, GLFWkeyfun keyCallb
         glfwTerminate();
         return;
     }
+    int major = glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MAJOR);
+    int minor = glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MINOR);
+    cout << "glfw version: " << major << "." << minor << endl;
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, frameSizeCallback);
 

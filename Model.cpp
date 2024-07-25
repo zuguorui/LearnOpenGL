@@ -1,4 +1,5 @@
 #include "Model.h"
+#include "RenderProgram.h"
 #include "util.h"
 #include <set>
 
@@ -9,7 +10,7 @@ Model::Model(string path) {
     loadModel(path);
 }
 
-void Model::draw(Shader &shader) {
+void Model::draw(RenderProgram &shader) {
     for (int i = 0; i < meshes.size(); i++) {
         meshes[i].draw(shader);
     }

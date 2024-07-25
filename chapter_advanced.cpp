@@ -1,7 +1,7 @@
 #include "chapter_advanced.h"
 
 #include "default_gl_include.h"
-#include "Shader.h"
+#include "RenderProgram.h"
 #include "GLWindow.h"
 #include "FPSCamera.h"
 #include "data.h"
@@ -174,8 +174,8 @@ void testFrameBuffer() {
 
     GLuint floorTexture = loadTexture("./images/metal.png");
 
-    Shader shader("./shaders/frame_buffer.vs", "./shaders/frame_buffer.frag");
-    Shader screenShader("./shaders/frame_buffer_screen.vs", "./shaders/frame_buffer_screen.frag");
+    RenderProgram shader("./shaders/frame_buffer.vs", "./shaders/frame_buffer.frag");
+    RenderProgram screenShader("./shaders/frame_buffer_screen.vs", "./shaders/frame_buffer_screen.frag");
 
     shader.use();
     shader.setInt("texture1", 0);
@@ -431,7 +431,7 @@ void testFaceCulling() {
     GLuint cubeTexture = loadTexture("./images/container.jpg");
     GLuint floorTexture = loadTexture("./images/metal.png");
 
-    Shader shader("./shaders/frame_buffer.vs", "./shaders/frame_buffer.frag");
+    RenderProgram shader("./shaders/frame_buffer.vs", "./shaders/frame_buffer.frag");
     shader.use();
     shader.setInt("texture1", 0);
 

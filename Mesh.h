@@ -7,7 +7,7 @@
 
 #include "Vertex.h"
 #include "Texture.h"
-#include "Shader.h"
+#include "RenderProgram.h"
 #include "default_gl_include.h"
 
 class Mesh {
@@ -18,7 +18,7 @@ public:
 
     Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::vector<Texture> textures);
 
-    void draw(Shader &shader);
+    void draw(RenderProgram &shader);
 
 private:
     uint32_t VAO, VBO, EBO;

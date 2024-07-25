@@ -1,6 +1,6 @@
 #include "chapter_coord.h"
 #include "GLWindow.h"
-#include "Shader.h"
+#include "RenderProgram.h"
 #include "default_stb_include.h"
 #include "default_gl_include.h"
 
@@ -17,7 +17,7 @@ void draw3DCube() {
 
     glEnable(GL_DEPTH_TEST);
 
-    Shader mShader("./shaders/3d_texture_cube.vs", "./shaders/3d_texture_cube.frag");
+    RenderProgram mShader("./shaders/3d_texture_cube.vs", "./shaders/3d_texture_cube.frag");
 
     uint8_t *data = nullptr;
     int width, height, numChannels;

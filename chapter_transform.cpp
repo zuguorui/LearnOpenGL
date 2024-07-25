@@ -2,7 +2,7 @@
 #include "chapter_transform.h"
 #include "default_gl_include.h"
 #include "GLWindow.h"
-#include "Shader.h"
+#include "RenderProgram.h"
 
 #include "default_stb_include.h"
 
@@ -65,7 +65,7 @@ void testTransform() {
     stbi_image_free(data);
     data = nullptr;
 
-    Shader mShader("./shaders/transform.vs", "./shaders/mix_textures.frag");
+    RenderProgram mShader("./shaders/transform.vs", "./shaders/mix_textures.frag");
 
     float vertices[] = {
         // vertex pos         // tex coords

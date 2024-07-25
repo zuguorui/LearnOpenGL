@@ -1,7 +1,7 @@
 #include "chapter_textures.h"
 #include "default_gl_include.h"
 #include "GLWindow.h"
-#include "Shader.h"
+#include "RenderProgram.h"
 #include "util.h"
 
 #include "default_stb_include.h"
@@ -37,7 +37,7 @@ void drawTriangleTexture() {
     // end: 加载纹理
 
     
-    Shader mShader("./shaders/textures.vs", "./shaders/textures.frag");
+    RenderProgram mShader("./shaders/textures.vs", "./shaders/textures.frag");
 
 
 
@@ -120,7 +120,7 @@ void drawRectangleTexture() {
 
     // end: 加载纹理
 
-    Shader mShader("./shaders/textures.vs", "./shaders/textures.frag");
+    RenderProgram mShader("./shaders/textures.vs", "./shaders/textures.frag");
 
     float vertices[] = {
         // vertex pos         // tex coords
@@ -237,7 +237,7 @@ void drawMixTexture() {
 
     // end: 加载纹理
 
-    Shader mShader("./shaders/textures.vs", "./shaders/mix_textures.frag");
+    RenderProgram mShader("./shaders/textures.vs", "./shaders/mix_textures.frag");
 
     float vertices[] = {
         // vertex pos         // tex coords

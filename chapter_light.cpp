@@ -2,7 +2,7 @@
 #include "GLWindow.h"
 #include "default_gl_include.h"
 #include "FPSCamera.h"
-#include "Shader.h"
+#include "RenderProgram.h"
 #include "default_stb_include.h"
 #include "util.h"
 #include "data.h"
@@ -91,8 +91,8 @@ void testLight()
     glBindVertexArray(0);
 
 
-    Shader cubeShader("./shaders/3d_light_cube.vs", "./shaders/3d_light_cube.frag");
-    Shader lightShader("./shaders/3d_color_cube.vs", "./shaders/3d_color_cube.frag");
+    RenderProgram cubeShader("./shaders/3d_light_cube.vs", "./shaders/3d_light_cube.frag");
+    RenderProgram lightShader("./shaders/3d_color_cube.vs", "./shaders/3d_color_cube.frag");
     cubeShader.use();
     lightShader.use();
 
@@ -204,8 +204,8 @@ void testMaterial() {
     glBindVertexArray(0);
 
 
-    Shader cubeShader("./shaders/material_cube.vs", "./shaders/material_cube.frag");
-    Shader lightShader("./shaders/3d_color_cube.vs", "./shaders/3d_color_cube.frag");
+    RenderProgram cubeShader("./shaders/material_cube.vs", "./shaders/material_cube.frag");
+    RenderProgram lightShader("./shaders/3d_color_cube.vs", "./shaders/3d_color_cube.frag");
     cubeShader.use();
     lightShader.use();
 
@@ -344,8 +344,8 @@ void testLightMap() {
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 
-    Shader cubeShader("./shaders/light_map.vs", "./shaders/light_map.frag");
-    Shader lightShader("./shaders/3d_color_cube.vs", "./shaders/3d_color_cube.frag");
+    RenderProgram cubeShader("./shaders/light_map.vs", "./shaders/light_map.frag");
+    RenderProgram lightShader("./shaders/3d_color_cube.vs", "./shaders/3d_color_cube.frag");
     cubeShader.use();
     lightShader.use();
 
@@ -501,7 +501,7 @@ void testParallelLight() {
     Direction direction = Direction::NONE;
     double lastTime = glfwGetTime();
 
-    Shader cubeShader("./shaders/parallel_light.vs", "./shaders/parallel_light.frag");
+    RenderProgram cubeShader("./shaders/parallel_light.vs", "./shaders/parallel_light.frag");
     cubeShader.use();
 
     cubeShader.setFloat("material.shininess", 64.0f);
@@ -639,7 +639,7 @@ void testPointLight() {
     Direction direction = Direction::NONE;
     double lastTime = glfwGetTime();
 
-    Shader cubeShader("./shaders/point_light.vs", "./shaders/point_light.frag");
+    RenderProgram cubeShader("./shaders/point_light.vs", "./shaders/point_light.frag");
     cubeShader.use();
 
     cubeShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
@@ -661,7 +661,7 @@ void testPointLight() {
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, specularTexture);
 
-    Shader lightShader("./shaders/3d_color_cube.vs", "./shaders/3d_color_cube.frag");
+    RenderProgram lightShader("./shaders/3d_color_cube.vs", "./shaders/3d_color_cube.frag");
     lightShader.use();
 
     
@@ -791,7 +791,7 @@ void testSpotLight() {
     Direction direction = Direction::NONE;
     double lastTime = glfwGetTime();
 
-    Shader cubeShader("./shaders/spot_light.vs", "./shaders/spot_light.frag");
+    RenderProgram cubeShader("./shaders/spot_light.vs", "./shaders/spot_light.frag");
     cubeShader.use();
 
     cubeShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);

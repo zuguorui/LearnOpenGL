@@ -1,7 +1,7 @@
 #include "color_space.h"
 
 #include "default_gl_include.h"
-#include "Shader.h"
+#include "RenderProgram.h"
 #include "GLWindow.h"
 #include "FPSCamera.h"
 

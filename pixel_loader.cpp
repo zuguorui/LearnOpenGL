@@ -1,6 +1,10 @@
 #include "pixel_loader.h"
 
+#include <_types/_uint8_t.h>
 #include <algorithm>
+#include <cstdio>
+#include <sys/_types/_int16_t.h>
+#include <sys/types.h>
 
 using namespace std;
 
@@ -83,6 +87,29 @@ bool load_yuv420p(int *width, int *height, int *bit_depth, uint8_t ***yuv) {
     (*yuv)[1] = u;
     (*yuv)[2] = v;
 
+    return true;
+}
+
+bool load_yuv420sp_data(int *width, int *height, int *bit_depth, uint8_t **data) {
+    const int SRC_WIDTH = 1536;
+    const int SRC_HEIGHT = 864;
+    const char *path = "assets/out-1536*864-nv21.yuv";
+    *width = SRC_WIDTH;
+    *height = SRC_HEIGHT;
+    *bit_depth = 8;
+
+    FILE *f = fopen(path, "rb");
+    if (f == nullptr) {
+        return false;
+    }
+
+    int64_t pixelCount = (*width) * (*height);
+
+    *data = (uint8_t *)malloc(pixelCount * 3 * sizeof(uint8_t));
+
+    fread(*data, sizeof(uint8_t), pixelCount * 3, f);
+
+    fclose(f);
     return true;
 }
 
@@ -281,6 +308,31 @@ bool load_yuv420p16le(int *width, int *height, int *bit_depth, uint8_t ***yuv) {
     (*yuv)[0] = (uint8_t *)y;
     (*yuv)[1] = (uint8_t *)u;
     (*yuv)[2] = (uint8_t *)v;
+
+    return true;
+}
+
+bool load_rgb565_data(int *width, int *height, uint8_t **data) {
+    const int SRC_WIDTH = 1536;
+    const int SRC_HEIGHT = 864;
+
+    const char *path = "assets/out-1536*864-rgb565le.rgb";
+    *width = SRC_WIDTH;
+    *height = SRC_HEIGHT;
+
+    FILE *f = fopen(path, "rb");
+    if (f == nullptr) {
+        return false;
+    }
+
+    int64_t pixelCount = SRC_WIDTH * SRC_HEIGHT;
+
+    // rgb565每个像素占用16位。
+    *data = (uint8_t *)malloc(pixelCount * sizeof(int16_t));
+
+    fread(*data, sizeof(int16_t), pixelCount, f);
+
+    fclose(f);
 
     return true;
 }

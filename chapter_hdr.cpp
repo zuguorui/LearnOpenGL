@@ -1,7 +1,7 @@
 
 #include "chapter_hdr.h"
 #include "default_gl_include.h"
-#include "Shader.h"
+#include "RenderProgram.h"
 #include "GLWindow.h"
 
 #define SRC_WIDTH 800
@@ -142,7 +142,7 @@ void display_hdr_image()
     glEnableVertexAttribArray(1);
     glBindVertexArray(0);
 
-    Shader mShader("./shaders/hdr.vs", "./shaders/hdr.frag");
+    RenderProgram mShader("./shaders/hdr.vs", "./shaders/hdr.frag");
 
     mShader.use();
     mShader.setInt("tex_r", 0);

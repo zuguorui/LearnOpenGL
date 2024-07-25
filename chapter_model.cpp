@@ -52,7 +52,7 @@ void testLoadModel() {
     glfwSetInputMode(glWindow.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     Model model = Model("./assets/nanosuit/nanosuit.obj");
-    Shader shader = Shader("./shaders/load_model.vs", "./shaders/load_model.frag");
+    RenderProgram shader = RenderProgram("./shaders/load_model.vs", "./shaders/load_model.frag");
     shader.use();
     shader.setMat4("model", glm::mat4(1.0f));
 

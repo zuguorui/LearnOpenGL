@@ -2,7 +2,7 @@
 #define _YUV_TO_RGB_H_
 
 #include "GLWindow.h"
-#include "Shader.h"
+#include "RenderProgram.h"
 #include "default_stb_include.h"
 #include "default_gl_include.h"
 #include "util.h"

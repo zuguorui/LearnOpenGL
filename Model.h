@@ -2,7 +2,7 @@
 #define _MODEL_H_
 
 #include "Mesh.h"
-#include "Shader.h"
+#include "RenderProgram.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -15,16 +15,16 @@
 class Model {
 public:
     Model(std::string path);
-    void draw(Shader &shader);
+    void draw(RenderProgram &shader);
 private:
     std::vector<Mesh> meshes;
-    std::map<string, Texture> loadedTextures;
+    std::map<std::string, Texture> loadedTextures;
     std::string directory;
     void loadModel(std::string path);
     void processNode(aiNode *node, const aiScene *scene);
     Mesh processMesh(aiMesh *mesh, const aiScene *scene);
 
-    std::vector<Texture> loadMaterialTextures(aiMaterial *material, aiTextureType type, string typeName, const aiScene *scene);
+    std::vector<Texture> loadMaterialTextures(aiMaterial *material, aiTextureType type, std::string typeName, const aiScene *scene);
 };
 
 #endif

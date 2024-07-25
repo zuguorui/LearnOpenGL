@@ -35,7 +35,7 @@ void Mesh::setupMesh() {
 
 }
 
-void Mesh::draw(Shader &shader) {
+void Mesh::draw(RenderProgram &shader) {
     uint32_t diffuseNr = 1;
     uint32_t specularNr = 1;
     for (int i = 0; i < textures.size(); i++) {

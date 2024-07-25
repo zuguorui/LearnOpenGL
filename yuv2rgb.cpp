@@ -131,7 +131,7 @@ void yuv_to_rgb() {
     string fragmentShaderPath = "./shaders/yuv_rgb.frag";
     
 
-    Shader mShader("./shaders/yuv_rgb.vs", fragmentShaderPath.c_str());
+    RenderProgram mShader("./shaders/yuv_rgb.vs", fragmentShaderPath.c_str());
 
     mShader.use();
     mShader.setInt("tex_y", 0);
@@ -250,7 +250,7 @@ void rgb565_to_rgb888() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    Shader mShader("./shaders/rgb_packet.vs", "./shaders/rgb_packet.frag");
+    RenderProgram mShader("./shaders/rgb_packet.vs", "./shaders/rgb_packet.frag");
 
     mShader.use();
     mShader.setInt("tex_rgb", 0);
@@ -352,7 +352,7 @@ void display_raw_rgb565() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    Shader mShader("./shaders/rgb_packet.vs", "./shaders/rgb_packet.frag");
+    RenderProgram mShader("./shaders/rgb_packet.vs", "./shaders/rgb_packet.frag");
 
     mShader.use();
     mShader.setInt("tex_rgb", 0);
@@ -454,7 +454,7 @@ void rgb444_rgb888() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    Shader mShader("./shaders/rgb_packet.vs", "./shaders/rgb_packet.frag");
+    RenderProgram mShader("./shaders/rgb_packet.vs", "./shaders/rgb_packet.frag");
 
     mShader.use();
     mShader.setInt("tex_rgb", 0);
@@ -614,7 +614,7 @@ void display_dumps() {
     string fragmentShaderPath = "./shaders/yuv_rgb.frag";
     
 
-    Shader mShader("./shaders/yuv_rgb.vs", fragmentShaderPath.c_str());
+    RenderProgram mShader("./shaders/yuv_rgb.vs", fragmentShaderPath.c_str());
 
     mShader.use();
     mShader.setInt("tex_y", 0);

@@ -1,6 +1,6 @@
 #include "chapter_camera.h"
 #include "GLWindow.h"
-#include "Shader.h"
+#include "RenderProgram.h"
 #include "default_stb_include.h"
 #include "default_gl_include.h"
 #include "FPSCamera.h"
@@ -20,7 +20,7 @@ void testCamera()
 
     glEnable(GL_DEPTH_TEST);
 
-    Shader mShader("./shaders/3d_cube.vs", "./shaders/3d_cube.frag");
+    RenderProgram mShader("./shaders/3d_cube.vs", "./shaders/3d_cube.frag");
 
     uint8_t *data = nullptr;
     int width, height, numChannels;
@@ -262,7 +262,7 @@ void fpsCamera()
     // 禁用光标
     glfwSetInputMode(glWindow.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    Shader mShader("./shaders/3d_texture_cube.vs", "./shaders/3d_texture_cube.frag");
+    RenderProgram mShader("./shaders/3d_texture_cube.vs", "./shaders/3d_texture_cube.frag");
 
     uint8_t *data = nullptr;
     int width, height, numChannels;
@@ -485,7 +485,7 @@ void testCameraClass() {
 
     glfwSetScrollCallback(glWindow.window, scroll_callback1);
 
-    Shader mShader("./shaders/3d_texture_cube.vs", "./shaders/3d_texture_cube.frag");
+    RenderProgram mShader("./shaders/3d_texture_cube.vs", "./shaders/3d_texture_cube.frag");
 
     uint8_t *data = nullptr;
     int width, height, numChannels;

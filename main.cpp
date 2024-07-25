@@ -1,5 +1,11 @@
 
+#include <chrono>
+#include <deque>
 #include<iostream>
+#include <memory>
+#include <system_error>
+#include <type_traits>
+#include <typeinfo>
 
 #include "chapter_create_window.h"
 #include "chapter_hello_triangle.h"
@@ -13,6 +19,7 @@
 #include "chapter_advanced.h"
 #include "yuv2rgb.h"
 #include "chapter_hdr.h"
+#include "chapter_compute_shader.h"
 
 using namespace std;
 
@@ -50,7 +57,7 @@ int main()
     // testParallelLight();
     // testPointLight();
     // testSpotLight();
-    testLoadModel();
+    // testLoadModel();
     // testFrameBuffer();
     // testFaceCulling();
     // yuv_to_rgb();
@@ -60,7 +67,8 @@ int main()
     // display_dumps();
     // be_le();
     //display_hdr_image();
-
+    testPBO();
+    // testComputeShader();
     
     return 0;
 }
