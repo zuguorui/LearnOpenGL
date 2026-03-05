@@ -1,7 +1,11 @@
 #include "yuv2rgb.h"
 
+#include "GLWindow.h"
 #include "pixel_loader.h"
 #include "default_gl_include.h"
+#include <_types/_uint32_t.h>
+#include <_types/_uint8_t.h>
+#include <cstdio>
 
 using namespace std;
 
@@ -653,3 +657,253 @@ void display_dumps() {
     glDeleteTextures(1, &tex_v);
 
 }
+
+void display_nv21() {
+    int bitDepth;
+    int width, height;
+    uint8_t **data = nullptr;
+    // load_yuv420sp(&width, &height, &bitDepth, &data);
+    load_nv21_planner(&width, &height, &bitDepth, &data);
+    if (!data) {
+        cout << "load nv21 file faild" << endl;
+        return;
+    }
+
+    GLWindow glWindow = GLWindow::Builder().setSize(1920, 1080).setTitle("nv21").build();
+
+    float vertices[] = {
+        // vertex pos         // tex coords
+        -0.5f, -0.5f,  0.0f,  0.0f, 0.0f, // left-bottom
+         0.5f, -0.5f,  0.0f,  1.0f, 0.0f, // right-bottom
+         0.5f,  0.5f,  0.0f,  1.0f, 1.0f, // right-top
+        -0.5f,  0.5f,  0.0f,  0.0f, 1.0f, // left-top
+    };
+
+    unsigned int indices[] = {
+        0, 3, 2,
+        0, 1, 2
+    };
+
+    GLuint VAO, VBO, EBO;
+
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    RenderProgram mShader("./shaders/yuv_rgb.vs", "./shaders/yuv_rgb.frag");
+    if (!mShader.isReady()) {
+        cout << "program is not ready" << endl;
+        return;
+    }
+
+    int y_width = width;
+    int y_height = height;
+    
+    int u_width = y_width / 2;
+    int u_height = y_height / 2;
+    int v_width = y_width / 2;
+    int v_height = y_height / 2;
+
+    int dataFormat = GL_UNSIGNED_BYTE;
+
+
+    GLuint tex_y;
+    glGenTextures(1, &tex_y);
+
+    glBindTexture(GL_TEXTURE_2D, tex_y);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, y_width, y_height, 0, GL_RED, dataFormat, data[0]);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    GLuint tex_u;
+    glGenTextures(1, &tex_u);
+    glBindTexture(GL_TEXTURE_2D, tex_u);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, u_width, u_height, 0, GL_RED, dataFormat, data[1]);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    GLuint tex_v;
+    glGenTextures(1, &tex_v);
+    glBindTexture(GL_TEXTURE_2D, tex_v);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, v_width, v_height, 0, GL_RED, dataFormat, data[2]);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    free(data[0]);
+    free(data[1]);
+    free(data[2]);
+    free(data);
+
+    mShader.use();
+    mShader.setInt("tex_y", 0);
+    mShader.setInt("tex_u", 1);
+    mShader.setInt("tex_v", 2);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, tex_y);
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, tex_u);
+
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, tex_v);
+
+    while (!glfwWindowShouldClose(glWindow.window)) {
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        
+        mShader.use();
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+
+        glfwSwapBuffers(glWindow.window);
+        glfwPollEvents();
+    }
+
+    glDeleteBuffers(1, &VBO);
+    glDeleteVertexArrays(1, &VAO);
+
+    glDeleteTextures(1, &tex_y);
+    glDeleteTextures(1, &tex_u);
+    glDeleteTextures(1, &tex_v);
+}
+
+void display_nv21_packed() {
+    int width, height;
+    uint32_t *data = nullptr;
+    // load_yuv420sp(&width, &height, &bitDepth, &data);
+    load_nv21_packed(&width, &height, &data);
+    if (!data) {
+        cout << "load nv21 file faild" << endl;
+        return;
+    }
+
+    // 把这个文件写到磁盘上
+    FILE *f = fopen("./nv21_packed_1536*864.nv21", "wb");
+    fwrite(data, sizeof(uint32_t), width * height, f);
+    fflush(f);
+    fclose(f);
+
+    GLWindow glWindow = GLWindow::Builder().setSize(1920, 1080).setTitle("nv21").build();
+
+    float vertices[] = {
+        // vertex pos         // tex coords
+        -0.5f, -0.5f,  0.0f,  0.0f, 0.0f, // left-bottom
+         0.5f, -0.5f,  0.0f,  1.0f, 0.0f, // right-bottom
+         0.5f,  0.5f,  0.0f,  1.0f, 1.0f, // right-top
+        -0.5f,  0.5f,  0.0f,  0.0f, 1.0f, // left-top
+    };
+
+    unsigned int indices[] = {
+        0, 3, 2,
+        0, 1, 2
+    };
+
+    GLuint VAO, VBO, EBO;
+
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    RenderProgram mShader("./shaders/yuv_rgb.vs", "./shaders/render_yuv_packed.frag");
+    if (!mShader.isReady()) {
+        cout << "program is not ready" << endl;
+        return;
+    }
+
+    int y_width = width;
+    int y_height = height;
+    
+    int u_width = y_width / 2;
+    int u_height = y_height / 2;
+    int v_width = y_width / 2;
+    int v_height = y_height / 2;
+
+
+    GLuint tex_yuv;
+    glGenTextures(1, &tex_yuv);
+
+    glBindTexture(GL_TEXTURE_2D, tex_yuv);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, y_width, y_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    
+    
+
+    free(data);
+
+    mShader.use();
+    mShader.setInt("tex_yuv", 0);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, tex_yuv);
+
+
+    while (!glfwWindowShouldClose(glWindow.window)) {
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        
+        mShader.use();
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+
+        glfwSwapBuffers(glWindow.window);
+        glfwPollEvents();
+    }
+
+    glDeleteBuffers(1, &VBO);
+    glDeleteVertexArrays(1, &VAO);
+
+    glDeleteTextures(1, &tex_yuv);
+}
+

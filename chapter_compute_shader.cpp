@@ -134,6 +134,7 @@ void testPBO() {
                 glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
             }
         }
+    
 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -295,7 +296,7 @@ void testComputeShader() {
 
     glBindVertexArray(VAO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, VBO);
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 

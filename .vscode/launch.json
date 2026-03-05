@@ -11,6 +11,7 @@
             "stopOnEntry": false,
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
+            
         }
     ]
 }

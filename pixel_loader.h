@@ -31,4 +31,8 @@ bool load_rgb444(int *width, int *height, int *rDepth, int *gDepth, int *bDepth,
 
 bool load_raw_rgb444(int *width, int *height, int *rDepth, int *gDepth, int *bDepth, uint8_t **data, int64_t *dataSize);
 
+bool load_nv21_planner(int *width, int *height, int *bit_depth, uint8_t ***yuv);
+
+bool load_nv21_packed(int *width, int *height, uint32_t **yuv);
+
 #endif

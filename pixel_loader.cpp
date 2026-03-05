@@ -1,8 +1,11 @@
 #include "pixel_loader.h"
 
+#include <_types/_uint32_t.h>
 #include <_types/_uint8_t.h>
 #include <algorithm>
 #include <cstdio>
+#include <malloc/_malloc.h>
+#include <string.h>
 #include <sys/_types/_int16_t.h>
 #include <sys/types.h>
 
@@ -161,6 +164,8 @@ bool load_yuv420sp(int *width, int *height, int *bit_depth, uint8_t ***yuv) {
 
     return true;
 }
+
+
 
 bool load_yuv420p10le(int *width, int *height, int *bit_depth, uint8_t ***yuv) {
     const int SRC_WIDTH = 1536;
@@ -526,3 +531,100 @@ bool load_raw_rgb444(int *width, int *height, int *rDepth, int *gDepth, int *bDe
     return true;
 }
 
+
+bool load_nv21_planner(int *width, int *height, int *bit_depth, uint8_t ***yuv) {
+    const int SRC_WIDTH = 1536;
+    const int SRC_HEIGHT = 864;
+
+    const char *path = "assets/out-1536*864-nv21.yuv";
+    *width = SRC_WIDTH;
+    *height = SRC_HEIGHT;
+    *bit_depth = 8;
+
+
+    FILE *f = fopen(path, "rb");
+    if (f == nullptr) {
+        return false;
+    }
+
+    int64_t pixelCount = (*width) * (*height);
+
+    int64_t y_count = pixelCount;
+    int64_t u_count = pixelCount / 4;
+    int64_t v_count = pixelCount / 4;
+
+    uint8_t *y = (uint8_t *)malloc(y_count * sizeof(uint8_t));
+    uint8_t *u = (uint8_t *)malloc(u_count * sizeof(uint8_t));
+    uint8_t *v = (uint8_t *)malloc(v_count * sizeof(uint8_t));
+
+    // NV12 -> YYYYYYYYUVUV
+    // NV21 -> YYYYYYYYVUVU
+
+    uint8_t *data = (uint8_t *)malloc(y_count + u_count + v_count);
+    fread(data, 1, y_count + u_count + v_count, f);
+
+    fclose(f);
+
+    int vOffset = pixelCount;
+    int uOffset = pixelCount / 4;
+    
+    memcpy(y, data, pixelCount);
+
+    for (int i = 0; i < u_count; i++) {
+        v[i] = data[vOffset + 2 * i];
+        u[i] = data[vOffset + 2 * i + 1];
+    }
+
+    *yuv = (uint8_t **)malloc(3 * sizeof(uint8_t *));
+    (*yuv)[0] = y;
+    (*yuv)[1] = u;
+    (*yuv)[2] = v;
+
+    return true;
+}
+
+bool load_nv21_packed(int *width, int *height, uint32_t **yuv) {
+    const int SRC_WIDTH = 1536;
+    const int SRC_HEIGHT = 864;
+
+    const char *path = "assets/out-1536*864-nv21.yuv";
+    *width = SRC_WIDTH;
+    *height = SRC_HEIGHT;
+
+
+    FILE *f = fopen(path, "rb");
+    if (f == nullptr) {
+        return false;
+    }
+
+    int64_t pixelCount = (*width) * (*height);
+
+    int64_t y_count = pixelCount;
+    int64_t u_count = pixelCount / 4;
+    int64_t v_count = pixelCount / 4;
+
+    // NV12 -> YYYYYYYYUVUV
+    // NV21 -> YYYYYYYYVUVU
+
+    uint8_t *data = (uint8_t *)malloc(y_count + u_count + v_count);
+    fread(data, 1, y_count + u_count + v_count, f);
+
+    fclose(f);
+
+    *yuv = (uint32_t *)malloc(pixelCount * sizeof(uint32_t));
+
+    int vOffset = pixelCount;
+    int uOffset = pixelCount / 4;
+    
+    for (int my = 0; my < SRC_HEIGHT; my++) {
+        for (int mx = 0; mx < SRC_WIDTH; mx++) {
+            int y = data[my * SRC_WIDTH + mx];
+            int v = data[vOffset + my / 2 * SRC_WIDTH + mx / 2 * 2];
+            int u = data[vOffset + my / 2 * SRC_WIDTH + mx / 2 * 2 + 1];
+            (*yuv)[my * SRC_WIDTH + mx] = ((v & 0x00FF) << 16) | ((u & 0x00FF) << 8) | (y & 0x00FF);
+            
+        }
+    }
+
+    return true;
+}

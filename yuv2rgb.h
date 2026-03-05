@@ -21,4 +21,8 @@ void rgb444_rgb888();
 
 void display_dumps();
 
+void display_nv21();
+
+void display_nv21_packed();
+
 #endif

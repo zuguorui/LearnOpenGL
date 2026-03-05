@@ -1,6 +1,7 @@
 
 #include <chrono>
 #include <deque>
+#include <functional>
 #include<iostream>
 #include <memory>
 #include <system_error>
@@ -31,7 +32,6 @@ void be_le() {
     int8_t *b = (int8_t *)a;
     uint8_t c = b[0];
     uint8_t d = b[1];
-
     printf("c = 0x%x, d = 0x%x", c, d);
 }
 
@@ -57,7 +57,7 @@ int main()
     // testParallelLight();
     // testPointLight();
     // testSpotLight();
-    // testLoadModel();
+    testLoadModel();
     // testFrameBuffer();
     // testFaceCulling();
     // yuv_to_rgb();
@@ -65,9 +65,11 @@ int main()
     // display_raw_rgb565();
     // rgb444_rgb888();
     // display_dumps();
+    // display_nv21();
+    // display_nv21_packed();
     // be_le();
-    //display_hdr_image();
-    testPBO();
+    // display_hdr_image();
+    // testPBO();
     // testComputeShader();
     
     return 0;
